@@ -192,6 +192,9 @@ We update the plugin fairly regularly to ensure the plugin continues to run in t
 = Support and Documentation =
 Please refer to our [support pages](https://melapress.com/support/?utm_source=wp+repo&utm_medium=repo+link&utm_campaign=wordpress_org&utm_content=wsal) for all the technical and product documentation.
 
+= How can I report security bugs? =
+Please refer to our [Melapress plugins security program](https://melapress.com/plugins-security-program/).
+
 == Screenshots ==
 
 1. The WordPress activity logs from where the site administrator can see all the user and site changes.
