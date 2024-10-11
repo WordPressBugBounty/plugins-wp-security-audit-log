@@ -175,7 +175,7 @@ You can find more detailed information about WP Activity Log and its benefits in
 == Frequently Asked Questions ==
 
 = Does the free version of WP Activity Log limit the data it collects? =
-No, the free version does not limit the data the plugin collects. The preium version adds additional features such as extensive log filtering options, external database/log management service integration, user session management, and much more.
+No, the free version does not limit the data the plugin collects. The premium version adds additional features such as extensive log filtering options, external database/log management service integration, user session management, and much more.
 
 = How long can I keep the log data for? =
 You can keep the log data for as long as you want to, with no limits whatsoever placed on data retention. You can keep the log data forever if you want to.
@@ -193,7 +193,7 @@ We update the plugin fairly regularly to ensure the plugin continues to run in t
 Please refer to our [support pages](https://melapress.com/support/?utm_source=wp+repo&utm_medium=repo+link&utm_campaign=wordpress_org&utm_content=wsal) for all the technical and product documentation.
 
 = How can I report security bugs? =
-Please refer to our [Melapress plugins security program](https://melapress.com/plugins-security-program/).
+You can report security bugs through the Patchstack Vulnerability Disclosure Program. Please use this [form](https://patchstack.com/database/vdp/wp-security-audit-log). For more details please refer to our [Melapress plugins security program](https://melapress.com/plugins-security-program/).
 
 == Screenshots ==
 
