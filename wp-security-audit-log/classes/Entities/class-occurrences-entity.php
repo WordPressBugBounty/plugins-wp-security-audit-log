@@ -191,7 +191,7 @@ if ( ! class_exists( '\WSAL\Entities\Occurrences_Entity' ) ) {
 				PRIMARY KEY (`id`),
 				KEY `site_alert_created` (`site_id`,`alert_id`,`created_on`),
 				KEY `created_on` (`created_on`),
-				KEY `wsal_users` (`user_id`,`username`);
+				KEY `wsal_users` (`user_id`,`username`)
 				)
 			  ' . $collate . ';';
 

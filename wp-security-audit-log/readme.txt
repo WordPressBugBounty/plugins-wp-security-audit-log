@@ -5,8 +5,8 @@ License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
 Tags: activity log, event log, user tracking, logger, history 
 Requires at least: 5.5
-Tested up to: 6.7.1
-Stable tag: 5.3.0
+Tested up to: 6.7.2
+Stable tag: 5.3.1
 Requires PHP: 7.4
 
 The #1 user-rated activity log plugin for event logging, activity monitoring and change tracking.
@@ -217,6 +217,17 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 5.3.1 (2025-02-13) =
+
+**Improvement** 
+	 * Improved some of the WP CLI confirmation messages.
+	 * Removed the "red dot" typically associated with plugin upgrades when the update message is displayed.
+
+**Bug fixes**
+	 * Fixed: If the plugin is updated to 5.3.0 via WP CLI and no administrator logs in (allowing the plugin to set some settings) the message "You do not have sufficient rights to access this page" is displayed on the website login page.
+	 * Fixed: Custom recipient email addresses for weekly notifications was not being saved correctly in the plugin settings.
+	 * Improved the database sensor to ensure that Event IDs 5010, 5011, and 5012 are now accurately reported.
+
 = 5.3.0 (2025-02-11) =
 
 **New activity log event IDs (improved coverage)**
@@ -238,7 +249,6 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 	 * ID 9167 - A product review was edited.
 
 **New activity log event IDs for Yoast SEO** 
-	
 	 * ID 8872 - Changed the "Personal logo" in the Organization/Person setting.
 	 * ID 8859 - Enabled / disabled a  site feature in the plugin settings (this ID replaces 8815, 8817, 8819, 8844, 8846, and 8828, which remain part of the plugin to ensure backward compatibility).
 	 * ID 8860 - Changed the status of the crawl optimization settings in the plugin settings.
