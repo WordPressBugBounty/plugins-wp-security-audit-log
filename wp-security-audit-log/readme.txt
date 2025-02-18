@@ -6,7 +6,7 @@ License URI: https://www.gnu.org/licenses/gpl.html
 Tags: activity log, event log, user tracking, logger, history 
 Requires at least: 5.5
 Tested up to: 6.7.2
-Stable tag: 5.3.1
+Stable tag: 5.3.2
 Requires PHP: 7.4
 
 The #1 user-rated activity log plugin for event logging, activity monitoring and change tracking.
@@ -217,6 +217,11 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
+= 5.3.2 (2025-02-18) =
+
+**Improvement** 
+	 * Updated the upgrade script so the weekly summary email is disabled by default when upgrading from older versions.
+
 = 5.3.1 (2025-02-13) =
 
 **Improvement** 
@@ -224,7 +229,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 	 * Removed the "red dot" typically associated with plugin upgrades when the update message is displayed.
 
 **Bug fixes**
-	 * Fixed: If the plugin is updated to 5.3.0 via WP CLI and no administrator logs in (allowing the plugin to set some settings) the message "You do not have sufficient rights to access this page" is displayed on the website login page.
+	 * Fixed: If the plugin is updated to 5.3.0 via composer or WP CLI and no administrator is already (allowing the plugin to set some settings) the message “You do not have sufficient rights to access this page” is displayed on the website login page.
 	 * Fixed: Custom recipient email addresses for weekly notifications was not being saved correctly in the plugin settings.
 	 * Improved the database sensor to ensure that Event IDs 5010, 5011, and 5012 are now accurately reported.
 
