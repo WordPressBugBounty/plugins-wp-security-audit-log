@@ -6,7 +6,7 @@ License URI: https://www.gnu.org/licenses/gpl.html
 Tags: activity log, event log, user tracking, logger, history 
 Requires at least: 5.5
 Tested up to: 6.7.2
-Stable tag: 5.3.2
+Stable tag: 5.3.3
 Requires PHP: 7.4
 
 The #1 user-rated activity log plugin for event logging, activity monitoring and change tracking.
@@ -217,89 +217,14 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
-= 5.3.2 (2025-02-18) =
-
-**Improvement** 
-	 * Updated the upgrade script so the weekly summary email is disabled by default when upgrading from older versions.
-
-= 5.3.1 (2025-02-13) =
-
-**Improvement** 
-	 * Improved some of the WP CLI confirmation messages.
-	 * Removed the "red dot" typically associated with plugin upgrades when the update message is displayed.
-
-**Bug fixes**
-	 * Fixed: If the plugin is updated to 5.3.0 via composer or WP CLI and no administrator is already (allowing the plugin to set some settings) the message “You do not have sufficient rights to access this page” is displayed on the website login page.
-	 * Fixed: Custom recipient email addresses for weekly notifications was not being saved correctly in the plugin settings.
-	 * Improved the database sensor to ensure that Event IDs 5010, 5011, and 5012 are now accurately reported.
-
-= 5.3.0 (2025-02-11) =
-
-**New activity log event IDs (improved coverage)**
-	 * ID 6319 - Changed the status of the Weekly activity log summary email.
-	 * ID 6328 - Modified the recipients of Weekly activity log summary email.
-	 * ID 5030 - A plugin failed to install. X
-
-**New activity log event IDs for WooCommerce** 
-	 * ID 9157 - Enabled the setting to limit the purchase of a product to 1 item per order.
-	 * ID 9158 - Disabled the setting to limit the purchase of a product to 1 item per order.
-	 * ID 9159 - Changed the Store visibility status.
-	 * ID 9160 - A new review was posted.
-	 * ID 9161 - A product review was unapproved.
-	 * ID 9162 - A product review was approved.
-	 * ID 9163 - A product review was marked as spam.
-	 * ID 9164 - A product review was moved to trash.
-	 * ID 9165 - A product review was restored from trash.
-	 * ID 9166 - A product review was permanently deleted.
-	 * ID 9167 - A product review was edited.
-
-**New activity log event IDs for Yoast SEO** 
-	 * ID 8872 - Changed the "Personal logo" in the Organization/Person setting.
-	 * ID 8859 - Enabled / disabled a  site feature in the plugin settings (this ID replaces 8815, 8817, 8819, 8844, 8846, and 8828, which remain part of the plugin to ensure backward compatibility).
-	 * ID 8860 - Changed the status of the crawl optimization settings in the plugin settings.
-
-**New features**
-	 * Weekly email summary in the Free edition.
+= 5.3.3 (2025-03-04) =
 
 **Security fix**
-	 * Fixed a XSS vulnerability reported by zer0gh0st (D.Sim)	 
+	 * Fixed an insecure deserialization issue. Huge thanks to the Patchstack team for their help on this one.
 
-**Plugin & functionality improvements**
-	 * Improved the "Reverse proxy / WAF support" feature by adding more HTTP headers to choose from, and allowing users to specify custom HTTP headers.
-	 * "Super Admin" is now available as a "role" criteria in the custom notifications trigger builder, enabling one to set up notifications based on this user role.
-	 * Updated the metadata description for event ID 9042 to cater for WooCommerce's latest changes related to product visibility changes.
-	 * Improved the cron jobs loaded by the Free edition by removing some redundant ones.
-	 * Created a new category in the "Enable/Disable events" page called "Activity Log" and moved a number of events from the "WordPress & System".
-	 * Updated the event ID 6048 metadata to cater for the improved Reverse Proxy / Firewall Option.
-	 * Improved the database migration script (for when migrating from versions prioir to 4.6) to better handle data on large multisite networks.
-	 * Standardised the text format across the plugin pages.
-	 * Increased the limit of subsites displayed on multisite networks from 15 to 150 for a better handling and filtering of logs on larger multisite networks.
-	 * Removed the check and notice for the obsolete WP Activity Log extensions for third party plugins.
-	 * Updated the first-time configuration wizard and also included a new step for enabling weekly summary notifications.
-	 * Adjusted the loading of translation files to adapt the plugin to a change introduced in WordPress 6.7.
-	 * Added a new filter hook wsal_message_before_mirror to customize logs mirrored to third parties - [list of WP Activity Log hooks](https://melapress.com/support/kb/wp-activity-log-list-hooks/).
-	 * Extended the list of supported [WP CLI commands for WP Activity Log](https://melapress.com/support/kb/wp-cli-commands-wp-activity-log/).
-	 * Improved the WP_Log_In_Out_Sensor to accommodate recent updates in the wp_login_failed action.
-	 * WooCommerce event ID 9133 now reports when fee values inside an order are modified.
-	 * WooCommerce event ID 9076 now logs enabling or disabling of a payment method.
-	 * WooCommerce event ID 9072 is no longer redundantly appearing when a new product (ID 9001) is published.
-	 * WooCommerce event ID 9155 metadata now clearly states that notes were added to an order instead of "comments".
-	 * Event IDs 8806, 8813, 8814, 8822, 8824, 8828, 8830, 8831, 8832, 8836, 8837, 8863, 8864, 8865, 8868, 8869, and 8870 in Yoast SEO were updated and are now compatible with the latest versions of the plugin.
-	 * Merged several Yoast SEO event IDs into the new ID 8859 to track plugin settings modifications while maintaining backward compatibility.
-
-**Bug fixes**
-	* Fixed duplicated Event IDs (10000 and 10010) generated when creating new post types using ACF.
-	* Fixed a bug preventing ID 9138 from being reported when a new WooCommerce product was copied to a draft.
-	* Fixed intermittent fatal errors when resetting plugin settings or purging logs when WP Activity Log is installed on MainWP.
-	* Resolved issues with WooCommerce ID 9086 and ID 9040 not being properly reported.
-	* Fixed PHP errors when WooCommerce orders contain products with no ID.
-	* Improved support for UTF-8 characters in custom notifications.
-	* Fixed a bug preventing ID 5003 (User deleted a plugin) to not be reported on newer Wordpress core versions.
-	* Fixed WooCommerce event 9105 not reporting Order name correctly when the order contains different products.
-	* Fixed a PHP error that occurs during plugin updates when the Shield Security plugin is active simultaneously with WP Activity Log.
-	* Fixed a bug causing some WP Activity Log Events to be disabled from monitoring after some time.
-	* Fixed a bug in the Woocommerce sensor causing strange behavior when WP Activity Log is enabled along with Woocommerce + HPOS order mode + Deposits - Partial Payments Plugin.
-	* Fixed a PHP error that could occur when a new WooCommerce order is placed containing products with no ID.
-	* Fixed a PHP Warning related to the WP Activity Log widget in the dashboard.
+ * **Bug fixes**
+	 * Fixed a number of PHP warnings that could occur when certain system-related events were generated (6024, 6025, 6035, 6036, 6037, 6041, 6042, 6001, 6002, 6003, 6005, 6004, 6044, 6040).
+	 * Fixed an edge case issue in which periodic emails were not sent due to some issues with the cron job.
+	 * Fixed translation loading errors appearing in the Query Monitor plugin (translation loading too early in some cases).
 
 Refer to the complete [plugin changelog](https://melapress.com/support/kb/wp-activity-log-plugin-changelog/?utm_source=wp+repo&utm_medium=repo+link&utm_campaign=wordpress_org&utm_content=wsal) for more detailed information about what was new, improved and fixed in previous version updates of WP Activity Log.

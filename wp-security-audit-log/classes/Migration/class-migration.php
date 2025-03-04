@@ -1054,7 +1054,7 @@ if ( ! class_exists( '\WSAL\Utils\Migration' ) ) {
 		public static function migrate_up_to_5300() {
 			Migrate_53::migrate_up_to_5300();
 		}
-		
+
 		/**
 		 * Migration for version upto 5.3.2
 		 *
@@ -1071,11 +1071,26 @@ if ( ! class_exists( '\WSAL\Utils\Migration' ) ) {
 			if ( 'free' === \WpSecurityAuditLog::get_plugin_version() ) {
 				$options = Settings_Helper::get_option_value( Notifications::BUILT_IN_NOTIFICATIONS_SETTINGS_NAME, array() );
 
-				$options['daily_summary_notification'] = false;
+				$options['daily_summary_notification']  = false;
 				$options['weekly_summary_notification'] = false;
 
 				Settings_Helper::set_option_value( Notifications::BUILT_IN_NOTIFICATIONS_SETTINGS_NAME, $options );
 			}
+		}
+		/**
+		 * Migration for version upto 5.3.3
+		 *
+		 * Migrates notification settings
+		 *
+		 * Note: The migration methods need to be in line with the @see WSAL\Utils\Abstract_Migration::$pad_length
+		 *
+		 * @return void
+		 *
+		 * @since 5.3.3
+		 */
+		public static function migrate_up_to_5330() {
+
+			Cron_Jobs::remove_cron_option( 'wsal_daily_summary_report' );
 		}
 
 		/**
