@@ -6,7 +6,7 @@ License URI: https://www.gnu.org/licenses/gpl.html
 Tags: activity log, event log, user tracking, logger, history 
 Requires at least: 5.5
 Tested up to: 6.7.2
-Stable tag: 5.3.4
+Stable tag: 5.3.4.1
 Requires PHP: 7.4
 
 The #1 user-rated activity log plugin for event logging, activity monitoring and change tracking.
@@ -78,7 +78,7 @@ The premium edition of WP Activity Log takes WordPress user activity tracking to
 - See who is logged in and their current activities in real-time
 - Log off any user at the click of a button
 - Generate fully-configurable HTML and CSV reports
-- Get email and SMS notifications with important changes (fully configurable)
+- Get email, SMS and Slack notifications with important changes (fully configurable)
 - Search filters to fine tune the search results and find what you need in seconds
 - Store activity log in an external database to improve security and scalability
 - Mirror the activity log to logs management systems such as AWS CloudWatch, Loggly, and Papertrail in real-time
@@ -205,7 +205,7 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 2. See who is logged in to your WordPress and manage users sessions with Users Sessions Management in the Premium edition.
 3. The plugin settings from where site administrator can configure generic plugin settings such as [reverse proxy support](https://melapress.com/support/kb/wp-activity-log-support-reverse-proxies-web-application-firewalls/?utm_source=wp+repo&utm_medium=repo+link&utm_campaign=wordpress_org&utm_content=wsal), who can manage the plugin etc.
 4. Use the event Inspector to see more technical details about each event in the activity log, such as the session ID and UserAgent string.
-5. Configuring WordPress email and instant SMS alerts with the Email & SMS Notifications module in the Premium edition.
+5. Configuring WordPress email and instant SMS or Slack alerts with the Email, SMS & Slack Notifications module in the Premium edition.
 6. Search in the WordPress activity log with the use filters to fine tune the search results.
 7. The Enable/Disable events section from where Administrators can disable or enable activity log events.
 8. The Activity Log Viewer of a Super Admin in a WordPress multisite network installation alllows the admin to view the logs from all the network, or filter the logs of a specific site.
@@ -217,29 +217,9 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
-= 5.3.4 (2025-04-03) =
-
- * **New features**
-	 * Instant Slack notifications – users can now configure and send instant notifications to a Slack channel in addition to Email and SMS. 
-	 * Filters for staging environment -new filters "wsal_enable_notifications" and "wsal_enable_mirroring" to disable instant notifications and mirroring of logs on staging environments.
-	 * Last login time report - added a new report that shows the last login time for each user on the website.
-
- * **Plugin improvements**
-	 * Daily and weekly email summaries – added an option to include all logged events in email summaries.  
-	 * Improved the daily / weekly email summary template alignment in certain layouts and browsers.
-	 * Improved the help texts and descriptions across plugin pages, particularly in Reports & Notifications.
-	 * Added the Order ID metadata to all the WooCommerce order-related events.
-	 * Cron job-related event IDs are now disabled by default to prevent log pollution on sites with frequent cron executions.
-	 * Reorganized the items in the custom notification dropdown menu in alphabetical order.
-	 * Event IDs 4000 and 4001 (new user registrations) now display the user's email address in the metadata area.
-	 * Added new WooCommerce-specific criteria in the custom notifications builder, allowing filtering by Coupon ID, Product ID, Order ID, and Product Status.  
-	 * Improved the layout of upgrade notice banners.
+= 5.3.4.1 (2024-04-04) =
 
  * **Bug fixes**
-	 * Fixed a UI issue that caused horizontal scrolling in generated statistic reports.
-	 * The plugin will now correctly notify relevant site users of available updates, even when hidden from the Plugins page.
-	 * Resolved a PHP error triggered under specific edge cases when saving WooCommerce products.
-	 * Fixed an edge case where login-related IDs (e.g., 1000, 1001, 1002, 1003) were not mirrored to third-party services if the login page URL was modified.
-	 * Addressed a number of user-reported PHP warnings related to cron job event IDs.
+	 * Fixed an issue that affected the redirects setup on multisite networks.
 
 Refer to the complete [plugin changelog](https://melapress.com/support/kb/wp-activity-log-plugin-changelog/?utm_source=wp+repo&utm_medium=repo+link&utm_campaign=wordpress_org&utm_content=wsal) for more detailed information about what was new, improved and fixed in previous version updates of WP Activity Log.
