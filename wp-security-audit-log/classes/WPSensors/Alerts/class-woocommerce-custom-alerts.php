@@ -40,7 +40,7 @@ if ( ! class_exists( '\WSAL\WP_Sensors\Alerts\WooCommerce_Custom_Alerts' ) ) {
 		 */
 		public static function get_custom_alerts(): array {
 			// phpcs:disable WordPress.WP.I18n.MissingTranslatorsComment
-			if ( Woocommerce_Helper::load_alerts_for_sensor() || MainWP_Addon::check_mainwp_plugin_active() ) {
+			if ( \method_exists( Woocommerce_Helper::class, 'load_alerts_for_sensor' ) && Woocommerce_Helper::load_alerts_for_sensor() || MainWP_Addon::check_mainwp_plugin_active() ) {
 				return array(
 					esc_html__( 'WooCommerce', 'wp-security-audit-log' ) => array(
 						esc_html__( 'Products', 'wp-security-audit-log' ) => self::get_products_array(),

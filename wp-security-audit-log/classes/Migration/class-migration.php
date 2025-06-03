@@ -1126,7 +1126,7 @@ if ( ! class_exists( '\WSAL\Utils\Migration' ) ) {
 
 			Settings_Helper::set_disabled_alerts( $disabled_alerts );
 
-			if ( \class_exists( '\WSAL\Entities\Custom_Notifications_Entity' ) ) {
+			if ( \class_exists( '\WSAL\Entities\Custom_Notifications_Entity' ) && \method_exists( Custom_Notifications_Entity::class, 'get_upgrade_query_slack_template' ) ) {
 
 				// If one of the new columns exists there is no need to alter the table.
 				$column_exists = Custom_Notifications_Entity::check_column(

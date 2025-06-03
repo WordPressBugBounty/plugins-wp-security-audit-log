@@ -6,7 +6,7 @@ License URI: https://www.gnu.org/licenses/gpl.html
 Tags: activity log, event log, user tracking, logger, history 
 Requires at least: 5.5
 Tested up to: 6.8.1
-Stable tag: 5.4.0
+Stable tag: 5.4.1
 Requires PHP: 7.4
 
 The #1 user-rated activity log plugin for event logging, activity monitoring and change tracking.
@@ -216,6 +216,11 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 13. Use the Premium edition to also export any activity log data to an HTML report or CSV file. CSV files are the most widely supported format and can easily be read, parsed and imported in third party systems.
 
 == Changelog ==
+
+= 5.4.1 (2025-06-03) =
+
+ * **Bug fixes**
+	 * Fixed two PHP errors (related to missing methods) which could occur during migration from older plugin versions.
 
 = 5.4.0 (2025-06-02) =
 
