@@ -6,7 +6,7 @@ License URI: https://www.gnu.org/licenses/gpl.html
 Tags: activity log, event log, user tracking, logger, history 
 Requires at least: 5.5
 Tested up to: 6.8.1
-Stable tag: 5.4.1
+Stable tag: 5.4.2
 Requires PHP: 7.4
 
 The #1 user-rated activity log plugin for event logging, activity monitoring and change tracking.
@@ -217,102 +217,25 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
-= 5.4.1 (2025-06-03) =
+= 5.4.2 (2025-07-02) =
 
- * **Bug fixes**
-	 * Fixed two PHP errors (related to missing methods) which could occur during migration from older plugin versions.
+* **New activity log event ID**
+	 * ID 1011- user tried to access a page for which they did not have access to.
 
-= 5.4.0 (2025-06-02) =
+*  * **Plugin improvements**
+	 * Added more help text and updated existing text and URLs across multiple plugin pages.
+	 * Included a notice for the new users on fresh installations to better assist then in setting up the Notifications module.
+	 * Remove the Admin bar notification setting preview (Premium feature) from the Free edition
 
- * **New features**
-	 * New plugin setting to also keep a log of the Query strings (such as UTM parameters) inside the activity log events metadata.
-
- * **New activity log event IDs for Rank Math**
-	 * ID 10701 - Changed the status of a module in the plugin
-	 * ID 10702 - Modified the "SEO title" of a post
-	 * ID 10703 - Modified the "Meta description" of a post
-	 * ID 10704 - Modified the "Focus keyword" of a post
-	 * ID 10705 - Changed the status of the SEO setting "Pillar Content" in a post
-	 * ID 10706 - Changed the status of the "ROBOTS META Index" setting in a post
-	 * ID 10707 - Changed the status of the "ROBOTS META Nofollow" setting in a post
-	 * ID 10708 - Changed the status of the "ROBOTS META No Archive" setting in a post
-	 * ID 10709 - Changed the status of the "ROBOTS META No Image Index" setting in a post
-	 * ID 10710 - Changed the status of the "ROBOTS META No Snippet" setting in a post
-	 * ID 10711 - Changed the status of the "ADVANCED ROBOTS META Max Snippet" setting in a post
-	 * ID 10712 - Changed the status of the "ADVANCED ROBOTS META Max Video Preview" setting in a post
-	 * ID 10713 - Changed the status of the "ADVANCED ROBOTS META Max Image Preview" setting in a post
-	 * ID 10714 - Changed the Canonical URL of a post
-
- * **New activity log event IDs for the Termly plugin**
-	 * ID 10901 - Disconnected the site from the Termly account
-	 * ID 10902 - Changed the status of the Scheduled Automatic Scans
-	 * ID 10903 - Changed the status of the setting Add Termly Scanner to robotx.txt Allow list
-	 * ID 10904 - Changed the status of the Consent banner
-	 * ID 10905 - Changed the status of the Auto Blocker in the Banner settings
-	 * ID 10911 - Activated a new API key and connected the site to a Termly account
-
- * **New activity log event IDs for WooCommerce
-	 * ID 9169 - Changed the status of the Manage Stock store setting
-	 * ID 9170 - Changed the value of the Hold stock (minutes)
-	 * ID 9171 - Changed the status of the low stock notification
-	 * ID 9172 - Changed the status of the out of stock notification
-	 * ID 9173 - Changed the Notifications recipient(s) email address
-	 * ID 9174 - Changed the value of the Low stock threshold
-	 * ID 9175 - Changed the value of the Out of stock threshold
-	 * ID 9176 - Changed the status of the Out of stock visibility
-	 * ID 9177 - Changed the Out of stock threshold setting
-	 * ID 9178 - Changed the status of a Woocommerce webhook
-
-* **New activity log event IDs for MainWP**
-	 * ID 7718 - A new client was created
-	 * ID 7719 - Changed the email address of the client
-	 * ID 7720 - Changed the status of the client
-	 * ID 7721 - Deleted the client
-	 * ID 7722 - Added a site to the client
-	 * ID 7723 - Removed a site from the client
-	
- * **Plugin improvements**
-	 * Improved the sensors to keep a log of activities and site changes performed via site management platforms such as WP Umbrella, ManageWP, ModularDS, InfiniteWP, and WPRemote.
-	 * Improved event tracking of third-party plugins on multisite networks. Events are now captured even when the supported third-party plugin is not network active.
-	 * Improved layout of daily and weekly summary emails for better clarity and reduced redundancy.
-	 * Enhanced the UX in the Custom Notification Builder for when no default recipient is configured or when multiple default recipients are set.
-	 * Added confirmation feedback when users save changes on the Notification settings page.
-	 * Revised and improved the help text in the Notification page.
-	 * Standardized the default "From" email address used in notifications to match plugin branding and domain, while also improving email deliverability.
-	 * Event ID 4000 (new user was created) now includes the user's email address in the event description.
-	 * Updated the help text for the "Hide Plugin" setting for clarity.
-	 * Added a check in Event ID 2065 (post content modified) to advise admin if the WordPress revisions are not enabled.
-	 * Updated the install wizard to highlight the default From and Recipient email addresses used in notifications.
-	 * Adjusted several plugin URLs to ensure they open in a new window.
-	 * Disabled the event IDs 8825, 8845, and 8847, as they are no longer applicable to the latest version of Yoast SEO.
-	 * Added user email, first name, and last name columns to relevant Statistics report types.
-	 * Improved translation compatibility with third-party plugins (e.g. Loco Translate).
-	 * Improved the cleanup hook / process in the plugin to better handle large multisite setups with high activity volumes.
-	 *  Updated links and UTM parameters across plugin pages and emails.
-	 * Updated plugin branding with a new logo across plugin pages and emails.
-
- * **Bug fixes**
-	 * Fixed various PHP notices and warnings triggered by WordPress core update version 6.8.1.
-	 * Fixed several text formatting issues in the Weekly Summary email.
-	 * Fixed event IDs 5508, 5510, 5513, 5514, and 5515 because they were not being reported when changes were done in WP Forms due to an outdated sensor.
-	 * WooCommerce event IDs 9120, 9121, and 9122 were incorrectly logged under the object type "WooCommerce Product" instead of "WooCommerce Store."
-	 * Fixed an issue in the Premium edition preventing admin access to the "Delete Activity Log Data" setting.
-	 * Fixed several user-reported PHP warnings in the Notifications area.
-	 * Fixed JavaScript errors affecting saving or toggling of Weekly Summary notifications.
-	 * Fixed an edge case PHP error that could occur when creating a new sub site on a multisite network.
-	 * Fixed a bug preventing Yoast SEO ID 8803 ("Allow search engines to show post in search results") from being triggered.
-	 * Fixed an issue with the Report white labeling feature causing logo rendering issues in exported reports.
-	 * Fixed a bug in the Premium edition where premium features were not removed correctly after license expiration.
-	 * Fixed a display issue showing an incorrect message during report generation from archived logs.
-	 * Fixed an issue where the plugin could not detect supported ACF events when ACF PRO was installed.
-	 * Fixed problems with IP address extraction in event ID 1006.
-	 * Fixed a cron job issue preventing archiving of logs when set to a 15-minute interval.
-	 * Fixed an edge case PHP error (Undefined constant "WSAL\Utils\WSAL_OPT_PREFIX") during plugin migration in certain multisite setups.
-	 * Fixed a WordPress database error (Specified key was too long; max key length is 1000 bytes) which could cause malfunctions on some database setups.
-	 * Fixed a PHP error during plugin migration when archiving was running.
-	 * Fixed a missing asset error causing plugin malfunction.
-	 * Fixed a PHP error ("operator not supported for strings") that could cause plugin failures.
-	 * Fixed a PHP error generated when deleting a Gravity Forms entry.
-	 * Fixed several errors caused by missing CSS and JS files in the plugin.
+* **Bug fixes**
+	 * Resolved an issue in which the default **sender "From Email" address and name** were used instead of the user-configured ones in email notifications.
+	 * Fixed several WP 2FA plugin related event IDs that were not triggering or lacked complete metadata. Event IDs 7804, 7805, 7806, 7607, 7808, 7811, and 7812 are now logged and reported correctly.
+	 * Corrected a visual issue affecting the creation of Slack mirroring connections in the UI.
+	 * Addressed an edge case where custom login URLs could prevent event ID 1000 (user logged in) from being recorded.
+	 * Fixed a visual layout bug causing long event descriptions to overflow by adding horizontal scrolling.
+	 * Fixed a bug affecting event ID 2101, where the URL metadata field might not open the relevant post URL.
+	 * Resolved a few user-reported PHP errors that could appear when upgrading from older plugin versions.
+	 * Resolved a user-reported PHP error which could occur in very specific circumstances when using WP Activity Log alongside the Advanced Custom Fields plugin.
+	 * Fixed a user-reported JS error which could occur when saving the "Built-in notifications" after editing certain inputs with invalid data.
 
 Refer to the complete [plugin changelog](https://melapress.com/support/kb/wp-activity-log-plugin-changelog/?utm_source=wp+repo&utm_medium=repo+link&utm_campaign=wordpress_org&utm_content=wsal) for more detailed information about what was new, improved and fixed in previous version updates of WP Activity Log.

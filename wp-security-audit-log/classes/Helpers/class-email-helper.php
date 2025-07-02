@@ -212,11 +212,29 @@ if ( ! class_exists( '\WSAL\Helpers\Email_Helper' ) ) {
 		/**
 		 * Builds and returns the default email address used for the "from" email address when email is send
 		 *
+		 * @param bool $force_default - Return default mail forcefully.
+		 *
 		 * @return string
 		 *
 		 * @since 5.0.0
+		 * @since 5.4.1 - Added flag for estracting the default email forcefully.
 		 */
-		public static function get_default_email_address(): string {
+		public static function get_default_email_address( $force_default = false ): string {
+			if ( $force_default ) {
+				$sitename = \wp_parse_url( \network_home_url(), PHP_URL_HOST );
+
+				$from_email = '';
+
+				if ( null !== $sitename ) {
+					$from_email = 'wp-activity-log@';
+					if ( \str_starts_with( $sitename, 'www.' ) ) {
+						$sitename = substr( $sitename, 4 );
+					}
+
+					$from_email .= $sitename;
+				}
+				return $from_email;
+			}
 			$use_email = Settings_Helper::get_option_value( 'use-email', 'default_email' );
 
 			if ( 'default_email' === $use_email ) {
@@ -233,7 +251,10 @@ if ( ! class_exists( '\WSAL\Helpers\Email_Helper' ) ) {
 					$from_email .= $sitename;
 				}
 			} else {
-				$from_email = \get_bloginfo( 'admin_email' );
+				$from_email = (string) Settings_Helper::get_option_value( 'from-email' );
+				if ( empty( trim( $from_email ) ) ) {
+					$from_email = \get_bloginfo( 'admin_email' );
+				}
 			}
 
 			return $from_email;

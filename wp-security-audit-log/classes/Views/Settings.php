@@ -513,37 +513,40 @@ class WSAL_Views_Settings extends WSAL_AbstractView {
 				<?php
 				$disabled = '';
 				$label    = esc_html__( 'Admin bar notification', 'wp-security-audit-log' );
-				if ( wsal_freemius()->is_free_plan() ) {
-					$disabled = 'disabled';
-					$label    = esc_html__( 'Admin bar notification', 'wp-security-audit-log' );
+				if ( ! wsal_freemius()->is_free_plan() ) {
+					// $disabled = 'disabled';
+					// $label    = esc_html__( 'Admin bar notification', 'wp-security-audit-log' );
+
+					?>
+					<th><label for="admin_bar_notif_on"><?php echo esc_html( $label ); ?></label></th>
+					<td>
+						<fieldset <?php echo esc_attr( $disabled ); ?>>
+							<?php $abn = ! Settings_Helper::get_boolean_option_value( 'disable-admin-bar-notif', true ); ?>
+							<label for="admin_bar_notif_on">
+								<input type="radio" name="admin_bar_notif" id="admin_bar_notif_on" style="margin-top: -2px;" <?php checked( $abn ); ?> value="1">
+								<span><?php esc_html_e( 'Yes', 'wp-security-audit-log' ); ?></span>
+							</label>
+							<br/>
+							<label for="admin_bar_notif_off">
+								<input type="radio" name="admin_bar_notif" id="admin_bar_notif_off" style="margin-top: -2px;" <?php checked( $abn, false ); ?>  value="0">
+								<span><?php esc_html_e( 'No', 'wp-security-audit-log' ); ?></span>
+							</label>
+						</fieldset>
+					</td>
+					<?php
 				}
 				?>
-				<th><label for="admin_bar_notif_on"><?php echo esc_html( $label ); ?></label></th>
-				<td>
-					<fieldset <?php echo esc_attr( $disabled ); ?>>
-						<?php $abn = ! Settings_Helper::get_boolean_option_value( 'disable-admin-bar-notif', true ); ?>
-						<label for="admin_bar_notif_on">
-							<input type="radio" name="admin_bar_notif" id="admin_bar_notif_on" style="margin-top: -2px;" <?php checked( $abn ); ?> value="1">
-							<span><?php esc_html_e( 'Yes', 'wp-security-audit-log' ); ?></span>
-						</label>
-						<br/>
-						<label for="admin_bar_notif_off">
-							<input type="radio" name="admin_bar_notif" id="admin_bar_notif_off" style="margin-top: -2px;" <?php checked( $abn, false ); ?>  value="0">
-							<span><?php esc_html_e( 'No', 'wp-security-audit-log' ); ?></span>
-						</label>
-					</fieldset>
-				</td>
 			</tr>
-			<!-- / Admin Bar Notification -->
+			<!-- // Admin Bar Notification -->
 
 			<tr>
 				<?php
 				$disabled = '';
 				$label    = esc_html__( 'Admin bar notification updates', 'wp-security-audit-log' );
-				if ( wsal_freemius()->is_free_plan() ) {
-					$disabled = 'disabled';
-					$label    = esc_html__( 'Admin bar notification updates', 'wp-security-audit-log' );
-				}
+				if ( ! wsal_freemius()->is_free_plan() ) {
+					// $disabled = 'disabled';
+					// $label    = esc_html__( 'Admin bar notification updates', 'wp-security-audit-log' );
+				
 				?>
 				<th><label for="admin_bar_notif_refresh"><?php echo esc_html( $label ); ?></label></th>
 				<td>
@@ -560,6 +563,7 @@ class WSAL_Views_Settings extends WSAL_AbstractView {
 						</label>
 					</fieldset>
 				</td>
+				<?php } ?>
 			</tr>
 			<!-- / Admin Bar Notification Updates -->
 			</tbody>
@@ -906,7 +910,7 @@ class WSAL_Views_Settings extends WSAL_AbstractView {
 							<label for="default_email">
 								<input type="radio" name="use-email" id="default_email" value="default_email" <?php checked( $use_email, 'default_email' ); ?> />
 								<?php esc_html_e( 'Use the email address ', 'wp-security-audit-log' ); ?>
-								<?php echo ( Email_Helper::get_default_email_address() ); ?>
+								<?php echo ( Email_Helper::get_default_email_address( true ) ); ?>
 							</label>
 							<br>
 							<label for="custom_email">
@@ -916,12 +920,12 @@ class WSAL_Views_Settings extends WSAL_AbstractView {
 							<br>
 							<label for="FromEmail">
 								<?php esc_html_e( 'Email Address', 'wp-security-audit-log' ); ?>
-								<input type="email" id="FromEmail" name="FromEmail" value="<?php echo esc_attr( WSAL\Helpers\Settings_Helper::get_option_value( 'from-email' ) ); ?>" />
+								<input type="email" id="FromEmail" name="FromEmail" value="<?php echo esc_attr( Settings_Helper::get_option_value( 'from-email' ) ); ?>" />
 							</label>
 							<br>
 							<label for="DisplayName">
 								<?php esc_html_e( 'Display Name', 'wp-security-audit-log' ); ?>&nbsp;
-								<input type="text" id="DisplayName" name="DisplayName" value="<?php echo esc_attr( WSAL\Helpers\Settings_Helper::get_option_value( 'display-name' ) ); ?>" />
+								<input type="text" id="DisplayName" name="DisplayName" value="<?php echo esc_attr( Settings_Helper::get_option_value( 'display-name' ) ); ?>" />
 							</label>
 						</fieldset>
 					</td>
@@ -1692,7 +1696,7 @@ class WSAL_Views_Settings extends WSAL_AbstractView {
 		// Get roles.
 		$roles = array();
 		foreach ( get_editable_roles() as $role_name => $role_info ) {
-			if ( strpos( $role_name, \sanitize_text_field( \wp_unslash( $get_array['term'] ) )) !== false ) {
+			if ( strpos( $role_name, \sanitize_text_field( \wp_unslash( $get_array['term'] ) ) ) !== false ) {
 				array_push( $roles, $role_name );
 			}
 		}
