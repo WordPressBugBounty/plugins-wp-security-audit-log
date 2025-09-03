@@ -5,8 +5,8 @@ License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
 Tags: activity log, event log, user tracking, logger, history 
 Requires at least: 5.5
-Tested up to: 6.8.1
-Stable tag: 5.4.2
+Tested up to: 6.8.2
+Stable tag: 5.5
 Requires PHP: 7.4
 
 The #1 user-rated activity log plugin for event logging, activity monitoring and change tracking.
@@ -217,25 +217,38 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Changelog ==
 
-= 5.4.2 (2025-07-02) =
+= 5.5.0 (2025-09-03) =
 
-* **New activity log event ID**
-	 * ID 1011- user tried to access a page for which they did not have access to.
+ * **New features**
+	 * Add notes to activity log events - as an administrator, you can add your own notes to events in the activity log (Premium).
 
-*  * **Plugin improvements**
-	 * Added more help text and updated existing text and URLs across multiple plugin pages.
-	 * Included a notice for the new users on fresh installations to better assist then in setting up the Notifications module.
-	 * Remove the Admin bar notification setting preview (Premium feature) from the Free edition
+ * **New activity log event IDs
+	 * ID 1011 - user was denied access to a page
+	 * ID 6080 - WordPress core translation files updated
+	 * ID 5034 - Translation files for a plugin updated
+	 * ID 5035 - Translation files for a theme updated
+	
+ * **Plugin improvements & Enhancements**
+	 * Improved support for SQLite (allows for live preview of the plugin).
+	 * Added a preview link for the plugin-related event IDs in the activity log, which opens a modal that highlights the plugin’s page on the WordPress repository.
+	 * Improved the help text and hints on the Settings page for the "From" email address and display name email settings.
+	 * Added a dedicated port field in the Connections settings of MySQL (external and archiving database settings).
+	 * Added the number of events purged from the activity log by the plugin in event ID 6034
+	 * Updated the default "From display name" used in plugin emails to wp-activity-log@[your-website-domain].
+	 * Increased the Slack channel name input limit in the Notifications module to 20 characters.
+	 * Improved the wording of event IDs 1002 (failed login) and 1003 (failed logins for non existing user).
+	 * Added the Comment Status metadata to comment-related event IDs, mainly from 2090 up to 2097, and 2099.
 
-* **Bug fixes**
-	 * Resolved an issue in which the default **sender "From Email" address and name** were used instead of the user-configured ones in email notifications.
-	 * Fixed several WP 2FA plugin related event IDs that were not triggering or lacked complete metadata. Event IDs 7804, 7805, 7806, 7607, 7808, 7811, and 7812 are now logged and reported correctly.
-	 * Corrected a visual issue affecting the creation of Slack mirroring connections in the UI.
-	 * Addressed an edge case where custom login URLs could prevent event ID 1000 (user logged in) from being recorded.
-	 * Fixed a visual layout bug causing long event descriptions to overflow by adding horizontal scrolling.
-	 * Fixed a bug affecting event ID 2101, where the URL metadata field might not open the relevant post URL.
-	 * Resolved a few user-reported PHP errors that could appear when upgrading from older plugin versions.
-	 * Resolved a user-reported PHP error which could occur in very specific circumstances when using WP Activity Log alongside the Advanced Custom Fields plugin.
-	 * Fixed a user-reported JS error which could occur when saving the "Built-in notifications" after editing certain inputs with invalid data.
+ * **Bug fixes**
+	 * Fixed a number of edge case JavaScript errors that could prevent saving changes on the Notifications page.
+	 * Resolved an issue in the search module that hindered searches for event IDs that are longer than five digits.
+	 * Improved the handling of plugin changes via ManageWP. Event ID 5000 (new plugin installed) and event ID 5005 (new theme installed) now report correctly.
+	 * Corrected a bug that prevented event ID 6005 from being logged when permalinks were altered.
+	 * Fixed the CSV export of search results that previously exported fewer rows than actually found.
+	 * Addressed a cron-related issue that prevented clearing expired user sessions.
+	 * Expanded the TLD length limit in the setup wizard from 4 to 20 characters to support longer email domains.
+	 * Resolved a background PHP fatal error: TypeError: call_user_func_array() callback mismatch.
+	 * Fixed a number of display issues where inline CSS in the plugin affected SVG rendering in third-party plugins.
+	 * Fixed a bug which could cause malfunctions in streaming the logs to an external database or during mirroring when the cron job method via Action Scheduler was used.
 
 Refer to the complete [plugin changelog](https://melapress.com/support/kb/wp-activity-log-plugin-changelog/?utm_source=wp+repo&utm_medium=repo+link&utm_campaign=wordpress_org&utm_content=wsal) for more detailed information about what was new, improved and fixed in previous version updates of WP Activity Log.
