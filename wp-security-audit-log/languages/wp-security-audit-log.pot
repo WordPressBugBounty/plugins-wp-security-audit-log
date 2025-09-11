@@ -2,14 +2,14 @@
 # This file is distributed under the GPL v3.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Activity Log 5.5.0\n"
+"Project-Id-Version: WP Activity Log 5.5.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-security-audit-log\n"
 "Last-Translator: Melapress <info@melapress.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-09-03T08:15:58+00:00\n"
+"POT-Creation-Date: 2025-09-11T06:23:46+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: wp-security-audit-log\n"
@@ -652,7 +652,7 @@ msgstr ""
 msgid "The WSAL pruning date is set"
 msgstr ""
 
-#: classes/Entities/class-abstract-entity.php:670
+#: classes/Entities/class-abstract-entity.php:678
 msgid "Unsupported type \""
 msgstr ""
 
@@ -788,10 +788,31 @@ msgstr ""
 msgid "Current memory usage: "
 msgstr ""
 
-#: classes/Helpers/class-notices.php:128
-#: classes/Helpers/class-notices.php:146
+#: classes/Helpers/class-notices.php:140
+#: classes/Helpers/class-notices.php:158
+#: classes/Helpers/class-notices.php:191
 #: classes/Writers/class-csv-writer.php:230
 msgid "nonce is not provided or incorrect"
+msgstr ""
+
+#: classes/Helpers/class-notices.php:197
+msgid "Failed to dismiss the survey. Please try again."
+msgstr ""
+
+#: classes/Helpers/class-notices.php:228
+msgid "Want to know what the state of WordPress security is in 2025?"
+msgstr ""
+
+#: classes/Helpers/class-notices.php:230
+msgid "Discover the latest insights in our 2025 WordPress Security Survey Report."
+msgstr ""
+
+#: classes/Helpers/class-notices.php:232
+msgid "Read the survey"
+msgstr ""
+
+#: classes/Helpers/class-notices.php:233
+msgid "Dismiss this notice."
 msgstr ""
 
 #: classes/Helpers/class-plugin-settings-helper.php:303
@@ -827,6 +848,7 @@ msgstr ""
 
 #: classes/Helpers/class-settings-helper.php:1866
 #: classes/Helpers/class-settings-helper.php:1882
+#: classes/Views/class-setup-wizard.php:691
 #: classes/Views/Settings.php:1962
 msgid "Keep all data"
 msgstr ""
@@ -2461,15 +2483,11 @@ msgid "3 months (Older data will be deleted.)"
 msgstr ""
 
 #: classes/Views/class-setup-wizard.php:681
-msgid "6 months"
+msgid "6 months (Older data will be deleted.)"
 msgstr ""
 
 #: classes/Views/class-setup-wizard.php:686
-msgid "12 months"
-msgstr ""
-
-#: classes/Views/class-setup-wizard.php:691
-msgid "Keep all data."
+msgid "12 months (Older data will be deleted.)"
 msgstr ""
 
 #: classes/Views/class-setup-wizard.php:699
