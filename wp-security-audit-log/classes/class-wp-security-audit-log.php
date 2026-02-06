@@ -28,6 +28,7 @@ use WSAL\Actions\Plugin_Installer;
 use WSAL\Helpers\Uninstall_Helper;
 use WSAL\Controllers\Alert_Manager;
 use WSAL\ListAdminEvents\List_Events;
+use WSAL\CopyEventData\Copy_Event_Data;
 use WSAL\Controllers\Plugin_Extensions;
 use WSAL\WP_Sensors\WP_Database_Sensor;
 use WSAL\Helpers\Plugin_Settings_Helper;
@@ -164,16 +165,10 @@ if ( ! class_exists( 'WpSecurityAuditLog' ) ) {
 			// Plugin Deactivation Actions.
 			\register_deactivation_hook( WSAL_BASE_NAME, array( __CLASS__, 'deactivate_actions' ) );
 
-			// phpcs:disable
-			/* @free:start */
-			// phpcs:enable
+			// @free:start
 			\register_uninstall_hook( WSAL_BASE_NAME, array( Uninstall_Helper::class, 'uninstall' ) );
-			// phpcs:disable
-			/* @free:end */
-			// phpcs:enable
+			// @free:end
 
-			// phpcs:disable
-			// phpcs:enable
 
 			MainWP_Addon::init();
 			// Hide all unrelated to the plugin notices on the plugin admin pages.
@@ -429,12 +424,8 @@ if ( ! class_exists( 'WpSecurityAuditLog' ) ) {
 			// Dequeue conflicting scripts.
 			\add_action( 'wp_print_scripts', array( __CLASS__, 'dequeue_conflicting_scripts' ) );
 
-			// phpcs:disable
-			// phpcs:enable
 		}
 
-		// phpcs:disable
-		// phpcs:enable
 
 		/**
 		 * Load Freemius SDK.
@@ -500,8 +491,6 @@ if ( ! class_exists( 'WpSecurityAuditLog' ) ) {
 
 				self::load_freemius();
 
-				// phpcs:disable
-				// phpcs:enable
 				if ( ! apply_filters( 'wsal_disable_freemius_sdk', false ) ) {
 					// Add filters to customize freemius welcome message.
 					wsal_freemius()->add_filter( 'connect_message', array( __CLASS__, 'wsal_freemius_connect_message' ), 10, 6 );
@@ -743,7 +732,6 @@ if ( ! class_exists( 'WpSecurityAuditLog' ) ) {
 			}
 
 			if ( \is_admin() ) {
-				// phpcs:disable
 
 				// Hide plugin.
 				if ( Settings_Helper::get_boolean_option_value( 'hide-plugin' ) ) {
@@ -804,66 +792,90 @@ if ( ! class_exists( 'WpSecurityAuditLog' ) ) {
 		 * @internal
 		 *
 		 * @since 5.0.0
+		 * @since 5.6.0 - Return JSON payload instead of HTML.
 		 */
 		public static function ajax_disable_custom_field() {
-			// Die if user does not have permission to disable.
 			if ( ! Settings_Helper::current_user_can( 'edit' ) ) {
-				echo '<p>' . esc_html__( 'Error: You do not have sufficient permissions to disable this custom field.', 'wp-security-audit-log' ) . '</p>';
-				die();
+				\wp_send_json_error(
+					array(
+						'message' => \esc_html__( 'Error: You do not have sufficient permissions to disable this custom field.', 'wp-security-audit-log' ),
+					),
+					403
+				);
 			}
 
-			// Filter $_POST array for security.
-			$post_array = filter_input_array( INPUT_POST );
+			$notice = \sanitize_text_field( \wp_unslash( $_POST['notice'] ?? '' ) );
 
-			$disable_nonce    = ( isset( $_POST['disable_nonce'] ) ) ? \sanitize_text_field( \wp_unslash( $_POST['disable_nonce'] ) ) : null;
-			$notice           = ( isset( $_POST['notice'] ) ) ? \sanitize_text_field( \wp_unslash( $_POST['notice'] ) ) : null;
-			$object_type_post = ( isset( $_POST['object_type'] ) ) ? \sanitize_text_field( \wp_unslash( $_POST['object_type'] ) ) : null;
+			$nonce_is_valid = \check_ajax_referer( 'disable-custom-nonce' . $notice, 'disable_nonce', false );
 
-			if ( ! isset( $disable_nonce ) || ! \wp_verify_nonce( $disable_nonce, 'disable-custom-nonce' . $notice ) ) {
-				die();
+			if ( false === $nonce_is_valid ) {
+				\wp_send_json_error(
+					array(
+						'message' => \esc_html__( 'Error: Invalid nonce.', 'wp-security-audit-log' ),
+					),
+					403
+				);
 			}
 
-			$object_type = 'post';
-			if ( array_key_exists( 'object_type', $post_array ) && 'user' === $object_type_post ) {
-				$object_type = 'user';
-			}
+			$notice = \str_replace( array( "'", '"', ',' ), '', $notice );
 
-			$excluded_meta = array();
+			// Validate object type.
+			$object_type_post = \sanitize_text_field( \wp_unslash( $_POST['object_type'] ?? '' ) );
+			$object_type      = ( 'user' === $object_type_post ) ? 'user' : 'post';
+			$excluded_meta    = array();
+
+			// Get current excluded meta fields.
 			if ( 'post' === $object_type ) {
 				$excluded_meta = Settings_Helper::get_excluded_post_meta_fields();
 			} elseif ( 'user' === $object_type ) {
 				$excluded_meta = Settings_Helper::get_excluded_user_meta_fields();
 			}
 
-			array_push( $excluded_meta, \esc_html( $notice ) );
-
-			if ( 'post' === $object_type ) {
-				$excluded_meta = Settings_Helper::set_excluded_post_meta_fields( $excluded_meta );
-			} elseif ( 'user' === $object_type ) {
-				$excluded_meta = Settings_Helper::set_excluded_user_meta_fields( $excluded_meta );
+			// Add the new field to the array.
+			if ( ! \in_array( $notice, $excluded_meta, true ) ) {
+				$excluded_meta[] = $notice;
 			}
 
-			// Exclude object link.
-			$exclude_objects_link = add_query_arg(
+			// Save updated excluded meta fields.
+			if ( 'post' === $object_type ) {
+				Settings_Helper::set_excluded_post_meta_fields( $excluded_meta );
+			} elseif ( 'user' === $object_type ) {
+				Settings_Helper::set_excluded_user_meta_fields( $excluded_meta );
+			}
+
+			/**
+			 * Build response messages. These will end up inside <p> tags on the JS side.
+			 */
+			// Message 1: "Custom field [FIELD_NAME] is no longer being monitored.".
+			/* translators: %s: Custom field name */
+			$message_1 = \esc_html__( 'Custom field %s is no longer being monitored.', 'wp-security-audit-log' );
+			$p1_parts  = \explode( '%s', $message_1, 2 );
+			$p1_parts  = ( 2 === count( $p1_parts ) ) ? $p1_parts : array( $message_1, '' );
+
+			// Message 2: "Enable monitoring again from the [TAB_NAME] tab in settings.".
+			/* translators: %s: Settings tab name */
+			$message_2 = \esc_html__( 'Enable the monitoring of this custom field again from the %s tab in the plugin settings.', 'wp-security-audit-log' );
+			$p2_parts  = \explode( '%s', $message_2, 2 );
+			$p2_parts  = ( 2 === count( $p2_parts ) ) ? $p2_parts : array( $message_2, '' );
+
+			// Exclude object settings link.
+			$exclude_objects_link = \add_query_arg(
 				array(
 					'page' => 'wsal-settings',
 					'tab'  => 'exclude-objects',
 				),
-				network_admin_url( 'admin.php' )
+				\network_admin_url( 'admin.php' )
 			);
 
-			echo wp_sprintf(
-			/* translators: name of meta field (in bold) */
-				'<p>' . esc_html__( 'Custom field %s is no longer being monitored.', 'wp-security-audit-log' ) . '</p>',
-				'<strong>' . $notice . '</strong>' // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			\wp_send_json_success(
+				array(
+					'notice'       => $notice,
+					'settings_url' => \esc_url_raw( $exclude_objects_link ),
+					'tab_label'    => \esc_html__( 'Excluded Objects', 'wp-security-audit-log' ),
+					'p1_parts'     => $p1_parts,
+					'p2_parts'     => $p2_parts,
+				)
 			);
-
-			echo wp_sprintf(
-			/* translators: setting tab name "Excluded Objects" */
-				'<p>' . esc_html__( 'Enable the monitoring of this custom field again from the %s tab in the plugin settings.', 'wp-security-audit-log' ) . '</p>',
-				'<a href="' . \esc_url( $exclude_objects_link ) . '">' . esc_html__( 'Excluded Objects', 'wp-security-audit-log' ) . '</a>'
-			);
-			die;
 		}
 
 		/**
@@ -932,8 +944,6 @@ if ( ! class_exists( 'WpSecurityAuditLog' ) ) {
 
 			// Live events disabled in free version of the plugin.
 			$live_events_enabled = false;
-			// phpcs:disable
-			// phpcs:enable
 			// Set data array for common script.
 			$script_data = array(
 				'ajaxURL'           => \admin_url( 'admin-ajax.php' ),
@@ -946,8 +956,6 @@ if ( ! class_exists( 'WpSecurityAuditLog' ) ) {
 				'reloading_page'    => esc_html__( 'Reloading page', 'wp-security-audit-log' ),
 			);
 
-			// phpcs:disable
-			// phpcs:enable
 			\wp_localize_script( 'wsal-common', 'wsalCommonData', $script_data );
 
 			// Enqueue script.
@@ -955,8 +963,13 @@ if ( ! class_exists( 'WpSecurityAuditLog' ) ) {
 
 			?>			
 			<style>
-				#adminmenu #toplevel_page_wsal-auditlog div.wp-menu-image.svg {
+				.toplevel_page_wsal-auditlog.menu-top div.wp-menu-image.svg {
 					opacity: 0.6;
+				}
+				
+				.toplevel_page_wsal-auditlog.menu-top.wp-has-current-submenu div.wp-menu-image.svg,
+				.toplevel_page_wsal-auditlog.menu-top.wp-has-submenu:hover div.wp-menu-image.svg {
+					opacity: 1;
 				}
 			</style>
 			<?php
@@ -1351,8 +1364,6 @@ if ( ! class_exists( 'WpSecurityAuditLog' ) ) {
 				require_once plugin_dir_path( __FILE__ ) . 'third-party/vendor/autoload.php';
 			}
 
-			// phpcs:disable
-			// phpcs:enable
 
 			// Load action scheduler for event mirroring.
 			$action_scheduler_file_path = WSAL_BASE_DIR . implode(

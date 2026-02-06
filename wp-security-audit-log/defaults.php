@@ -158,7 +158,7 @@ function wsaldefaults_build_links( $link_aliases = array() ) {
 }
 
 /**
- * Loads all the events for the core and extentions
+ * Loads all the events for the core and extensions
  *
  * @return void
  *
@@ -173,8 +173,10 @@ function set_wsal_alerts() {
 					1000,
 					WSAL_LOW,
 					esc_html__( 'User logged in', 'wp-security-audit-log' ),
-					esc_html__( 'User logged in.', 'wp-security-audit-log' ),
-					array(),
+					esc_html__( 'User logged in', 'wp-security-audit-log' ),
+					array(
+						esc_html__( 'Login URL', 'wp-security-audit-log' ) => '%LoginPageURL%',
+					),
 					array(),
 					'user',
 					'login',
@@ -194,11 +196,14 @@ function set_wsal_alerts() {
 					WSAL_MEDIUM,
 					esc_html__( 'Failed login attempt', 'wp-security-audit-log' ),
 					esc_html__( 'Failed login attempt - wrong password.', 'wp-security-audit-log' ),
-					array(),
+					array(
+						esc_html__( 'Login URL', 'wp-security-audit-log' ) => '%LoginPageURL%',
+					),
 					array(
 						esc_html__( 'Security tip: limit users failed login attempts.', 'wp-security-audit-log' )  => array(
-							'url'   => 'https://melapress.com/wordpress-limit-login-attempts/?#utm_source=plugin&utm_medium=wsal&utm_campaign=event_1002',
-							'label' => esc_html__( 'limit users failed login attempts', 'wp-security-audit-log' ),
+							'url'                  => 'https://melapress.com/wordpress-limit-login-attempts/?#utm_source=plugin&utm_medium=wsal&utm_campaign=event_1002',
+							'label'                => esc_html__( 'limit users failed login attempts', 'wp-security-audit-log' ),
+							'exclude_from_reports' => true,
 						),
 					),
 					'user',
@@ -209,9 +214,10 @@ function set_wsal_alerts() {
 					WSAL_LOW,
 					esc_html__( 'Failed login attempt with a non-existing user', 'wp-security-audit-log' ),
 					esc_html__( 'Failed login attempt with the username %Users% - user does not exist.', 'wp-security-audit-log' ),
+					array(
+						esc_html__( 'Login URL', 'wp-security-audit-log' ) => '%LoginPageURL%',
+					),
 					array(),
-					array(),
-					// Constants::wsaldefaults_build_links( array( 'LogFileText' ) ),
 					'system',
 					'failed-login',
 				),
@@ -222,6 +228,7 @@ function set_wsal_alerts() {
 					esc_html__( 'Login blocked because other session(s) already exist for this user.', 'wp-security-audit-log' ),
 					array(
 						esc_html__( 'IP address', 'wp-security-audit-log' ) => '%ClientIP%',
+						esc_html__( 'Login URL', 'wp-security-audit-log' ) => '%LoginPageURL%',
 					),
 					array(),
 					'user',
@@ -234,6 +241,7 @@ function set_wsal_alerts() {
 					esc_html__( 'User logged in however there are other session(s) already for this user.', 'wp-security-audit-log' ),
 					array(
 						esc_html__( 'IP address(es)', 'wp-security-audit-log' ) => '%IPAddress%',
+						esc_html__( 'Login URL', 'wp-security-audit-log' ) => '%LoginPageURL%',
 					),
 					array(),
 					'user',
@@ -710,6 +718,34 @@ function set_wsal_alerts() {
 					Constants::wsaldefaults_build_links( array( 'EditorLinkPost', 'PostUrlIfPublished' ) ),
 					'post',
 					'modified',
+				),
+				array(
+					2134,
+					WSAL_LOW,
+					esc_html__( 'A user accessed a password-protected post', 'wp-security-audit-log' ),
+					esc_html__( 'User accessed the password-protected post %PostTitle%.', 'wp-security-audit-log' ),
+					array(
+						esc_html__( 'Post ID', 'wp-security-audit-log' )        => '%PostID%',
+						esc_html__( 'Post type', 'wp-security-audit-log' )      => '%PostType%',
+						esc_html__( 'Post status', 'wp-security-audit-log' )    => '%PostStatus%',
+					),
+					Constants::wsaldefaults_build_links( array( 'PostUrl', 'EditorLinkPost' ) ),
+					'post',
+					'viewed',
+				),
+				array(
+					2135,
+					WSAL_MEDIUM,
+					esc_html__( 'A user entered the wrong password while trying to access a password-protected post', 'wp-security-audit-log' ),
+					esc_html__( 'User entered the wrong password while trying to access the password-protected post %PostTitle%.', 'wp-security-audit-log' ),
+					array(
+						esc_html__( 'Post ID', 'wp-security-audit-log' )        => '%PostID%',
+						esc_html__( 'Post type', 'wp-security-audit-log' )      => '%PostType%',
+						esc_html__( 'Post status', 'wp-security-audit-log' )    => '%PostStatus%',
+					),
+					Constants::wsaldefaults_build_links( array( 'PostUrl', 'EditorLinkPost' ) ),
+					'post',
+					'denied',
 				),
 			),
 
@@ -2202,7 +2238,7 @@ function set_wsal_alerts() {
 						esc_html__( 'Post status', 'wp-security-audit-log' ) => '%PostStatus%',
 						esc_html__( 'Plugin', 'wp-security-audit-log' )      => '%PluginName%',
 					),
-					Constants::wsaldefaults_build_links( array( 'EditorLinkPage', 'PluginRepoUrl'  ) ),
+					Constants::wsaldefaults_build_links( array( 'EditorLinkPage', 'PluginRepoUrl' ) ),
 					'post',
 					'created',
 				),
@@ -2258,6 +2294,24 @@ function set_wsal_alerts() {
 					array(),
 					'plugin',
 					'failed',
+				),
+				array(
+					5032,
+					WSAL_INFORMATIONAL,
+					esc_html__( 'Plugin update available', 'wp-security-audit-log' ),
+					esc_html__( 'Plugin update available for plugin %PluginName%.', 'wp-security-audit-log' ),
+					array(
+						esc_html__( 'Available version', 'wp-security-audit-log' )   => '%NewPluginVersion%',
+						esc_html__( 'Installed version', 'wp-security-audit-log' )   => '%CurrentPluginVersion%',
+					),
+					array(
+						esc_html__( 'View all updates', 'wp-security-audit-log' )  => array(
+							'url'   => '%UpdateAdminUrl%',
+							'label' => 'View all updates',
+						),
+					),
+					'system',
+					'available',
 				),
 				array(
 					2051,
@@ -2345,6 +2399,24 @@ function set_wsal_alerts() {
 					array(),
 					'file',
 					'modified',
+				),
+				array(
+					5033,
+					WSAL_INFORMATIONAL,
+					esc_html__( 'Theme update available', 'wp-security-audit-log' ),
+					esc_html__( 'Theme update available for theme: %ThemeName%.', 'wp-security-audit-log' ),
+					array(
+						esc_html__( 'Available version', 'wp-security-audit-log' )     => '%NewThemeVersion%',
+						esc_html__( 'Installed version', 'wp-security-audit-log' )   => '%CurrentThemeVersion%',
+					),
+					array(
+						esc_html__( 'View all updates', 'wp-security-audit-log' )  => array(
+							'url'   => '%UpdateAdminUrl%',
+							'label' => 'View all updates',
+						),
+					),
+					'system',
+					'available',
 				),
 				array(
 					5035,
@@ -2911,6 +2983,24 @@ function set_wsal_alerts() {
 					array(),
 					'system',
 					'updated',
+				),
+				array(
+					6079,
+					WSAL_INFORMATIONAL,
+					esc_html__( 'WordPress core update available', 'wp-security-audit-log' ),
+					esc_html__( 'WordPress core update available', 'wp-security-audit-log' ),
+					array(
+						esc_html__( 'Available version', 'wp-security-audit-log' )     => '%NewWPVersion%',
+						esc_html__( 'Installed version', 'wp-security-audit-log' )   => '%CurrentWPVersion%',
+					),
+					array(
+						esc_html__( 'View all updates', 'wp-security-audit-log' )  => array(
+							'url'   => '%UpdateAdminUrl%',
+							'label' => 'View all updates',
+						),
+					),
+					'system',
+					'available',
 				),
 				array(
 					6080,

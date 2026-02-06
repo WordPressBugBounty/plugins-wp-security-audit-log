@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace WSAL\WP_Sensors;
 
+use WSAL\Helpers\Settings_Helper;
 use WSAL\Controllers\Alert_Manager;
 use WSAL\WP_Sensors\Helpers\WP_Plugins_Themes_Helper;
 
@@ -134,6 +135,10 @@ if ( ! class_exists( '\WSAL\WP_Sensors\WP_Plugins_Themes_Sensor' ) ) {
 			\add_action( 'upgrader_process_complete', array( __CLASS__, 'on_plugin_or_theme_update' ), 10, 2 );
 
 			\add_filter( 'upgrader_post_install', array( __CLASS__, 'on_upgrader_post_install' ), 10, 3 );
+
+			\add_action( 'set_site_transient', array( __CLASS__, 'on_available_plugin_update' ), 10, 3 );
+
+			\add_action( 'set_site_transient', array( __CLASS__, 'on_available_theme_update' ), 10, 3 );
 		}
 
 		/**
@@ -183,13 +188,13 @@ if ( ! class_exists( '\WSAL\WP_Sensors\WP_Plugins_Themes_Sensor' ) ) {
 		 */
 		public static function on_deactivated_plugin( $plugin_name ) {
 			if ( ! in_array( $plugin_name, self::$reported_plugins, true ) ) {
-				$plugin_data = \get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin_name, true, false );
+				$plugin_data = \get_plugin_data( \WP_PLUGIN_DIR . '/' . $plugin_name, true, false );
 				$plugin_slug = dirname( $plugin_name );
 
 				Alert_Manager::trigger_event(
 					5002,
 					array(
-						'PluginFile' => WP_PLUGIN_DIR . '/' . $plugin_name,
+						'PluginFile' => \WP_PLUGIN_DIR . '/' . $plugin_name,
 						'PluginData' => (object) array(
 							'Name'          => $plugin_data['Name'],
 							'PluginURI'     => $plugin_data['PluginURI'],
@@ -419,8 +424,8 @@ if ( ! class_exists( '\WSAL\WP_Sensors\WP_Plugins_Themes_Sensor' ) ) {
 				'plugin_requires_wp'  => $new_plugin_data['RequiresWP'] ?? '',
 				'plugin_requires_php' => $new_plugin_data['RequiresPHP'] ?? '',
 				// Prevent warning Undefined array key "Network" in an edge case when an invalid plugin.zip is uploaded to the site.
-				'plugin_network'      => ( $plugin_data['Network'] ?? false ) ? 'True' : 'False',
-				'plugin_path'         => WP_PLUGIN_DIR . \DIRECTORY_SEPARATOR . $plugin,
+				'plugin_network'      => ( $new_plugin_data['Network'] ?? false ) ? \esc_html__( 'True', 'wp-security-audit-log' ) : \esc_html__( 'False', 'wp-security-audit-log' ),
+				'plugin_path'         => \WP_PLUGIN_DIR . \DIRECTORY_SEPARATOR . $plugin,
 			);
 
 			if ( isset( $new_plugin_data['UpdateURI'] ) ) {
@@ -429,7 +434,6 @@ if ( ! class_exists( '\WSAL\WP_Sensors\WP_Plugins_Themes_Sensor' ) ) {
 
 			// Check for premium version being installed / updated.
 			if ( in_array( $plugin, array( \WpSecurityAuditLog::PREMIUM_VERSION_WHOLE_PLUGIN_NAME, \WpSecurityAuditLog::FREE_VERSION_WHOLE_PLUGIN_NAME, \WpSecurityAuditLog::NOFS_VERSION_WHOLE_PLUGIN_NAME ), true ) ) {
-
 				return;
 			}
 
@@ -498,14 +502,13 @@ if ( ! class_exists( '\WSAL\WP_Sensors\WP_Plugins_Themes_Sensor' ) ) {
 			}
 
 			if ( is_array( $arr_data['plugin'] ) && isset( $arr_data['plugin'] ) && 'wp-security-audit-log.php' === $arr_data['plugin'] ) {
-
 				return;
 			}
 
 			// No plugin info in instance, so get it ourself.
 			$plugin_data = array();
-			if ( file_exists( WP_PLUGIN_DIR . '/' . $arr_data['plugin'] ) ) {
-				$plugin_data = \get_plugin_data( WP_PLUGIN_DIR . '/' . $arr_data['plugin'], true, false );
+			if ( file_exists( \WP_PLUGIN_DIR . '/' . $arr_data['plugin'] ) ) {
+				$plugin_data = \get_plugin_data( \WP_PLUGIN_DIR . '/' . $arr_data['plugin'], true, false );
 			}
 
 			$plugin_slug = dirname( $arr_data['plugin'] );
@@ -518,7 +521,7 @@ if ( ! class_exists( '\WSAL\WP_Sensors\WP_Plugins_Themes_Sensor' ) ) {
 				'plugin_author'      => $plugin_data['Author'] ?? '',
 				'plugin_version'     => $plugin_data['Version'] ?? '',
 				'plugin_url'         => $plugin_data['PluginURI'] ?? '',
-				'plugin_network'     => ( $plugin_data['Network'] ) ? 'True' : 'False',
+				'plugin_network'     => ( $plugin_data['Network'] ?? false ) ? \esc_html__( 'True', 'wp-security-audit-log' ) : \esc_html__( 'False', 'wp-security-audit-log' ),
 				'plugin_path'        => \WP_PLUGIN_DIR . \DIRECTORY_SEPARATOR . $arr_data['plugin'],
 			);
 
@@ -528,7 +531,6 @@ if ( ! class_exists( '\WSAL\WP_Sensors\WP_Plugins_Themes_Sensor' ) ) {
 			}
 
 			if ( ! \is_wp_error( \validate_plugin( $arr_data['plugin'] ) ) ) {
-
 				$old_plugins = self::get_old_plugins();
 
 				$old_version = ( isset( $old_plugins[ $arr_data['plugin'] ] ) ) ? $old_plugins[ $arr_data['plugin'] ]['Version'] : false;
@@ -576,18 +578,16 @@ if ( ! class_exists( '\WSAL\WP_Sensors\WP_Plugins_Themes_Sensor' ) ) {
 			$plugins_updated = isset( $arr_data['plugins'] ) ? (array) $arr_data['plugins'] : array();
 
 			foreach ( $plugins_updated as $plugin ) {
-
 				$arr_data['plugin'] = $plugin;
 
 				if ( is_array( $arr_data['plugin'] ) && isset( $arr_data['plugin'] ) && 'wp-security-audit-log.php' === $arr_data['plugin'] ) {
-
 					return;
 				}
 
 				// No plugin info in instance, so get it ourself.
 				$plugin_data = array();
-				if ( file_exists( WP_PLUGIN_DIR . '/' . $arr_data['plugin'] ) ) {
-					$plugin_data = \get_plugin_data( WP_PLUGIN_DIR . '/' . $arr_data['plugin'], true, false );
+				if ( file_exists( \WP_PLUGIN_DIR . '/' . $arr_data['plugin'] ) ) {
+					$plugin_data = \get_plugin_data( \WP_PLUGIN_DIR . '/' . $arr_data['plugin'], true, false );
 				}
 
 				$plugin_slug = dirname( $arr_data['plugin'] );
@@ -600,7 +600,7 @@ if ( ! class_exists( '\WSAL\WP_Sensors\WP_Plugins_Themes_Sensor' ) ) {
 					'plugin_author'      => $plugin_data['Author'] ?? '',
 					'plugin_version'     => $plugin_data['Version'] ?? '',
 					'plugin_url'         => $plugin_data['PluginURI'] ?? '',
-					'plugin_network'     => ( $plugin_data['Network'] ) ? 'True' : 'False',
+					'plugin_network'     => ( $plugin_data['Network'] ?? false ) ? \esc_html__( 'True', 'wp-security-audit-log' ) : \esc_html__( 'False', 'wp-security-audit-log' ),
 					'plugin_path'        => \WP_PLUGIN_DIR . \DIRECTORY_SEPARATOR . $arr_data['plugin'],
 				);
 
@@ -610,7 +610,6 @@ if ( ! class_exists( '\WSAL\WP_Sensors\WP_Plugins_Themes_Sensor' ) ) {
 				}
 
 				if ( ! \is_wp_error( \validate_plugin( $arr_data['plugin'], ) ) ) {
-
 					$old_plugins = self::get_old_plugins();
 
 					$old_version = ( isset( $old_plugins[ $arr_data['plugin'] ] ) ) ? $old_plugins[ $arr_data['plugin'] ]['Version'] : false;
@@ -655,7 +654,6 @@ if ( ! class_exists( '\WSAL\WP_Sensors\WP_Plugins_Themes_Sensor' ) ) {
 			}
 
 			if ( is_array( $plugin_data ) && isset( $plugin_data['TextDomain'] ) && 'wp-security-audit-log' === $plugin_data['TextDomain'] ) {
-
 				return;
 			}
 
@@ -669,12 +667,11 @@ if ( ! class_exists( '\WSAL\WP_Sensors\WP_Plugins_Themes_Sensor' ) ) {
 				'plugin_author'      => $plugin_data['Author'],
 				'plugin_version'     => $plugin_data['Version'],
 				'plugin_url'         => $plugin_data['PluginURI'],
-				'plugin_network'     => ( $plugin_data['Network'] ) ? 'True' : 'False',
+				'plugin_network'     => ( $plugin_data['Network'] ?? false ) ? \esc_html__( 'True', 'wp-security-audit-log' ) : \esc_html__( 'False', 'wp-security-audit-log' ),
 				'plugin_path'        => \WP_PLUGIN_DIR . \DIRECTORY_SEPARATOR . $plugin_slug,
 			);
 
 			if ( ! \is_wp_error( \validate_plugin( $plugin_slug ) ) ) {
-
 				$old_plugins = self::get_old_plugins();
 
 				$old_version = ( isset( $old_plugins[ $plugin_slug ] ) ) ? $old_plugins[ $plugin_slug ]['Version'] : false;
@@ -1018,8 +1015,7 @@ if ( ! class_exists( '\WSAL\WP_Sensors\WP_Plugins_Themes_Sensor' ) ) {
 					} else {
 						$plugin_name = isset( $get_array['plugin'] ) ? $get_array['plugin'] : false;
 						if ( ! \is_wp_error( \validate_plugin( $plugin_name ) ) ) {
-
-							$plugin_data = $plugin_name ? get_plugin_data( trailingslashit( WP_PLUGIN_DIR ) . $plugin_name ) : false;
+							$plugin_data = $plugin_name ? get_plugin_data( trailingslashit( \WP_PLUGIN_DIR ) . $plugin_name ) : false;
 							$plugin_slug = dirname( $plugin_name );
 
 							Alert_Manager::trigger_event(
@@ -1071,7 +1067,7 @@ if ( ! class_exists( '\WSAL\WP_Sensors\WP_Plugins_Themes_Sensor' ) ) {
 					} else {
 						$plugin_name = isset( $get_array['plugin'] ) ? $get_array['plugin'] : false;
 						if ( ! \is_wp_error( \validate_plugin( $plugin_name ) ) ) {
-							$plugin_data = $plugin_name ? get_plugin_data( trailingslashit( WP_PLUGIN_DIR ) . $plugin_name ) : false;
+							$plugin_data = $plugin_name ? get_plugin_data( trailingslashit( \WP_PLUGIN_DIR ) . $plugin_name ) : false;
 
 							$plugin_slug = dirname( $plugin_name );
 
@@ -1341,6 +1337,139 @@ if ( ! class_exists( '\WSAL\WP_Sensors\WP_Plugins_Themes_Sensor' ) ) {
 			}
 
 			return $response;
+		}
+
+		/**
+		 * Notify when a plugin update is available.
+		 *
+		 * @param string $transient - The name of the site transient.
+		 * @param mixed  $value - Site transient value.
+		 * @param int    $expiration - Time until expiration in seconds.
+		 *
+		 * @since 5.6.0
+		 */
+		public static function on_available_plugin_update( $transient, $value, $expiration ) {
+
+			// If this is not the update_plugins transient, return early.
+			if ( 'update_plugins' !== $transient ) {
+				return;
+			}
+
+			// If there aren't updates, return early.
+			if ( empty( $value->response ) || ! is_array( $value->response ) ) {
+				return;
+			}
+
+			$notified_updates = Settings_Helper::get_option_value( 'notified_plugin_updates', array() );
+
+			$all_plugins = \get_plugins();
+
+			foreach ( $value->response as $plugin_file => $plugin_data ) {
+
+				// Double check if the plugin file exists.
+				if ( ! isset( $all_plugins[ $plugin_file ] ) ) {
+					continue;
+				}
+
+				$new_available_version = \esc_html( $plugin_data->new_version );
+				$last_notified_version = $notified_updates[ $plugin_file ] ?? null;
+
+				// Check if this version was already notified, and in that case, skip the event for this plugin.
+				if ( $last_notified_version && version_compare( $last_notified_version, $new_available_version, '>=' ) ) {
+					continue;
+				}
+
+				$plugin_folder_name = self::get_plugin_dir( $plugin_file );
+				$event_plugin_data  = WP_Plugins_Themes_Helper::get_plugin_event_info_from_folder( $plugin_folder_name );
+
+				if ( is_array( $event_plugin_data ) ) {
+					$plugin_name            = $event_plugin_data['Name'];
+					$plugin_current_version = $event_plugin_data['Version'];
+					$update_admin_screen    = \esc_url( \network_admin_url( 'update-core.php' ) );
+
+					$server_address = isset( $_SERVER['SERVER_ADDR'] ) ? \sanitize_text_field( \wp_unslash( $_SERVER['SERVER_ADDR'] ) ) : '127.0.0.1';
+
+					Alert_Manager::trigger_event(
+						5032,
+						array(
+							'CurrentUserID'        => 0,
+							'ClientIP'             => $server_address,
+							'PluginName'           => $plugin_name,
+							'CurrentPluginVersion' => $plugin_current_version,
+							'NewPluginVersion'     => $new_available_version,
+							'UpdateAdminUrl'       => $update_admin_screen,
+						)
+					);
+
+					// Mark this plugin update as notified, use the current new version as reference.
+					$notified_updates[ $plugin_file ] = $new_available_version;
+				}
+			}
+
+			// Update the notified updates option.
+			Settings_Helper::set_option_value( 'notified_plugin_updates', $notified_updates );
+		}
+
+		/**
+		 * Notify when a theme update is available.
+		 *
+		 * @param string $transient - The name of the site transient.
+		 * @param mixed  $value - Site transient value.
+		 * @param int    $expiration - Time until expiration in seconds.
+		 *
+		 * @since 5.6.0
+		 */
+		public static function on_available_theme_update( $transient, $value, $expiration ) {
+
+			// If this is not the update_plugins transient, return early.
+			if ( 'update_themes' !== $transient ) {
+				return;
+			}
+
+			// If there aren't updates, return early.
+			if ( empty( $value->response ) || ! is_array( $value->response ) ) {
+				return;
+			}
+
+			$notified_updates = Settings_Helper::get_option_value( 'notified_theme_updates', array() );
+
+			foreach ( $value->response as $theme_folder => $theme_data ) {
+				$new_available_version = \esc_html( $theme_data['new_version'] );
+				$last_notified_version = $notified_updates[ $theme_folder ] ?? null;
+
+				// Check if this version was already notified, and in that case, skip the event for this plugin.
+				if ( $last_notified_version && version_compare( $last_notified_version, $new_available_version, '>=' ) ) {
+					continue;
+				}
+
+				$theme_event_data = WP_Plugins_Themes_Helper::get_theme_event_info_from_folder( $theme_folder );
+
+				if ( is_array( $theme_event_data ) ) {
+					$theme_name            = $theme_event_data['Name'];
+					$theme_current_version = $theme_event_data['Version'];
+					$update_admin_screen   = \esc_url( \network_admin_url( 'update-core.php' ) );
+
+					$server_address = isset( $_SERVER['SERVER_ADDR'] ) ? \sanitize_text_field( \wp_unslash( $_SERVER['SERVER_ADDR'] ) ) : '127.0.0.1';
+
+					Alert_Manager::trigger_event(
+						5033,
+						array(
+							'CurrentUserID'       => 0,
+							'ClientIP'            => $server_address,
+							'ThemeName'           => $theme_name,
+							'CurrentThemeVersion' => $theme_current_version,
+							'NewThemeVersion'     => $new_available_version,
+							'UpdateAdminUrl'      => $update_admin_screen,
+						)
+					);
+
+					// Mark this plugin update as notified, use the current new version as reference.
+					$notified_updates[ $theme_folder ] = $new_available_version;
+				}
+			}
+
+			// Update the notified updates option.
+			Settings_Helper::set_option_value( 'notified_theme_updates', $notified_updates );
 		}
 	}
 }
