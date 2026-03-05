@@ -6,7 +6,7 @@ License URI: https://www.gnu.org/licenses/gpl.html
 Tags: activity log, event log, user tracking, logger, history 
 Requires at least: 5.5
 Tested up to: 6.9
-Stable tag: 5.6.0
+Stable tag: 5.6.1
 Requires PHP: 7.4
 
 The #1 user-rated activity log plugin for event logging, activity monitoring and change tracking.
@@ -239,33 +239,22 @@ These capabilities make WP Activity Log a **comprehensive solution for site secu
 
 == Changelog ==
 
-= 5.6.0 (2026-01-29) =
-
-* **NEW: LearnDash support**
-	 * WP Activity Log can now keep a log of 100+ user actions and settings changes in LearnDash. Refer to the [LearnDash activity log event IDs](https://melapress.com/support/kb/wp-activity-log-list-event-ids/#learndash-events) for the complete list.
+= 5.6.1 (2026-03-05) =
 	
- * **Plugin improvements & Enhancements**
-	 * User login events now include the login URL as metadata. Mainly event ID's 1000, 1002, 1003, 1004, 1005.
-	 * Moved all the plugin's settings into the sitemeta table on multisite installs. Credit to [https://github.com/nicomollet](https://github.com/nicomollet) for the recommended fix.
-	 * Reviewed and improved input sanitization across all user and third-party data handling points.
-	 * Suppressed the activity log events generated automatically during the plugin install, to reduce event noise.
-	 * Replaced the "esc_html_e" with the "esc_html__" in some scenarios, as an improvement.
-	 * Updated event ID's 5032, 5033, 6079 to correctly attribute them to "System" instead of the logged-in user, and changed the IP address to server IP, reflecting that the update checks were run by the system, and that they were not user actions.
-	 * Removed the title from the "disable this type of event" hover over tooltip in the activity log viewer for cleaner UI presentation.
-	 * Removed obsolete "Modify" button from event IDs 1002, 1003, 6007, and 6023 tooltips.
-
- * **Security fix**
-	 * Fixed a reported XSS. Credits to Steven Julian.
+ * **Plugin & functionality improvements**
+	 * Multisite network performance improvement: plugin now caches plugin activation data, rather than querying it on every request. The cache is updated only when a plugin is activated or deactivated (events 5001/5002).
+	 * Changed the link and text of the Melapress Login Security plugin promotion in event ID 1002.
+	 * Improved the survey banner behaviour. It now appears after 15 days on new installs, and on upgrades it shows right away; dismissing it via the "x" will show it again on the next upgrade; completing the survey suppresses it on upgrades.
 
  * **Bug fixes**
-	 * Fixed PHP 8.3 TypeError in WooCommerce product editing caused by strpos() receiving a false value instead of string in class-woocommerce-sensor-helper-second.php line 290, which was preventing users from editing products and causing critical failure notices.
-	 * Fixed email validation in periodic reports configuration to accept longer custom domain TLDs, such as .digital.
-	 * Fixed a conflict when WP Activity Log is network-activated on multisite installations alongside SearchWP.
-	 * Fixed the Activity Log menu icon styling on multisite sub-sites by correcting a CSS selector.
-	 * Fixed a number of PHP warnings in the WP 2FA sensor by resolving undefined variable issues in class-wp-2fa-sensor.php that occurred during WP 2FA plugin installation where WP Activity Log was already activated.
-	 * Fixed a fatal PHP TypeError in the IP address normalization module where str_replace() received a boolean false instead of a string during a cron job execution on newer PHP versions.
-	 * Fixed a PHP warning for undefined array key "Network" in class-wp-plugins-themes-sensor.php line 603, that occurred in edge cases during plugin/theme operations on live websites.
-	 * Fixed a number of PHP warnings that occurred when attempting to read properties (ID and post_title) on null objects in the WooCommerce activity log sensor.
-	 * Fixed an edge where false positive event ID 9119 was triggering when WooCommerce product low stock threshold remained unchanged.
+	 * Fixed: Email summary reports displaying incorrect usernames for users with numeric-only login names, caused by array_slice() mishandling numeric string keys.
+	 * Fixed: Fixed a date discrepancy issue in the summary emails where the previous day's date is shown instead of the correct one.
+	 * Fixed: Connections in multisite installs not appearing after being saved, caused by the get_options_by_prefix function still reading from the old options location after connections were migrated to wp_sitemeta in 5.6.0.
+	 * Fixed: Edge case where a fresh plugin install could cause a fatal error and crash the site during the migration routine, triggered by a null value being passed to count() in the legacy notifications migration class.
+	 * Fixed: Fatal error crashing MainWP dashboard when accessing the plugin, caused by a call to switch_to_blog() in the settings helper, which is a multisite-only function being called in a non-multisite context introduced in 5.6.0.
+	 * Fixed: JavaScript error thrown by the Copy Event Data extension when the activity log contains no events, caused by the script attempting to process an undefined event message on page load.
+	 * Fixed: PHP notices thrown in WordPress 6.9.1 caused by the wsal-event-notes and wsal-copy-event-data scripts declaring darktooltip as a dependency before it was registered.
+	 * Fixed: an edge case fatal error on sites without LearnDash installed, caused by class-notices.php referencing the LearnDash_Helper class unconditionally without first checking whether the LearnDash plugin was active.
+	 * Fixed: HTML entity appearing literally in the Date column of CSV exports instead of rendering as a space before the AM/PM indicator.
 
 Refer to the complete [plugin changelog](https://melapress.com/support/kb/wp-activity-log-plugin-changelog/?utm_source=wp+repo&utm_medium=repo+link&utm_campaign=wordpress_org&utm_content=wsal) for more detailed information about what was new, improved and fixed in previous version updates of WP Activity Log.
