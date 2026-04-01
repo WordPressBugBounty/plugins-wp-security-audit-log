@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1b5353bab5721917c6b1666dd7293033
+class ComposerStaticInitdc53e209ffa7f1cd8c7ebdc2eeff34a7
 {
     public static $prefixLengthsPsr4 = array (
         'W' =>
@@ -56,10 +56,13 @@ class ComposerStaticInit1b5353bab5721917c6b1666dd7293033
         'WSAL\\Extensions\\Helpers\\Notification_Helper' => __DIR__ . '/../..' . '/classes/notification/class-notification-helper.php',
         'WSAL\\Extensions\\Helpers\\Notification_Template' => __DIR__ . '/../..' . '/classes/notification/class-notification-template.php',
         'WSAL\\Extensions\\Notifications\\Custom_Notifications' => __DIR__ . '/../..' . '/classes/notification/Lists/class-custom-notifications.php',
+        'WSAL\\FeedbackForm\\Feedback_Form' => __DIR__ . '/../..' . '/classes/FeedbackForm/class-feedback-form.php',
         'WSAL\\Helpers\\Assets' => __DIR__ . '/../..' . '/classes/Helpers/class-assets.php',
         'WSAL\\Helpers\\Classes_Helper' => __DIR__ . '/../..' . '/classes/Helpers/class-classes-helper.php',
+        'WSAL\\Helpers\\Credential_Settings_Helper' => __DIR__ . '/../..' . '/classes/Helpers/class-credential-settings-helper.php',
         'WSAL\\Helpers\\DateTime_Formatter_Helper' => __DIR__ . '/../..' . '/classes/Helpers/class-datetime-formatter-helper.php',
         'WSAL\\Helpers\\Email_Helper' => __DIR__ . '/../..' . '/classes/Helpers/class-email-helper.php',
+        'WSAL\\Helpers\\Encryption_Helper' => __DIR__ . '/../..' . '/classes/Helpers/class-encryption-helper.php',
         'WSAL\\Helpers\\File_Helper' => __DIR__ . '/../..' . '/classes/Helpers/class-file-helper.php',
         'WSAL\\Helpers\\Formatters\\Alert_Formatter' => __DIR__ . '/../..' . '/classes/Helpers/formatters/class-alert-formatter.php',
         'WSAL\\Helpers\\Formatters\\Alert_Formatter_Configuration' => __DIR__ . '/../..' . '/classes/Helpers/formatters/class-alert-formatter-configuration.php',
@@ -179,9 +182,9 @@ class ComposerStaticInit1b5353bab5721917c6b1666dd7293033
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit1b5353bab5721917c6b1666dd7293033::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit1b5353bab5721917c6b1666dd7293033::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit1b5353bab5721917c6b1666dd7293033::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitdc53e209ffa7f1cd8c7ebdc2eeff34a7::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitdc53e209ffa7f1cd8c7ebdc2eeff34a7::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitdc53e209ffa7f1cd8c7ebdc2eeff34a7::$classMap;
 
         }, null, ClassLoader::class);
     }

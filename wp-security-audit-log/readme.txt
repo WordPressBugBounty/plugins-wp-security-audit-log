@@ -5,8 +5,8 @@ License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
 Tags: activity log, event log, user tracking, logger, history 
 Requires at least: 5.5
-Tested up to: 6.9
-Stable tag: 5.6.1
+Tested up to: 6.9.4
+Stable tag: 5.6.2
 Requires PHP: 7.4
 
 The #1 user-rated activity log plugin for event logging, activity monitoring and change tracking.
@@ -239,22 +239,36 @@ These capabilities make WP Activity Log a **comprehensive solution for site secu
 
 == Changelog ==
 
-= 5.6.1 (2026-03-05) =
+= 5.6.2 (2026-04-01) =
+
+ * **New event IDs for Learndash**
+	 * ID 11020 – A course was viewed.
+	 * ID 11021 – A course was opened in the editor.
+	 * ID 11215 – A lesson was viewed.
+	 * ID 11216 – A lesson was opened in the editor.
+
+ * **New functionality**
+	* Implemented a plugin deactivation form to allow users to share their feedback.
 	
  * **Plugin & functionality improvements**
-	 * Multisite network performance improvement: plugin now caches plugin activation data, rather than querying it on every request. The cache is updated only when a plugin is activated or deactivated (events 5001/5002).
-	 * Changed the link and text of the Melapress Login Security plugin promotion in event ID 1002.
-	 * Improved the survey banner behaviour. It now appears after 15 days on new installs, and on upgrades it shows right away; dismissing it via the "x" will show it again on the next upgrade; completing the survey suppresses it on upgrades.
+	 * Twilio and Slack API credentials (Account SID, Auth Token, Bot Token) can now be defined as PHP constants in `wp-config.php`. When a constant is defined, it takes priority over the value stored in the database, reducing exposure in the event of a database compromise.
+	 * Added the seconds in the report's time column for improved precision and consistency with other export formats.
+	 * Added `enabled`/`disabled` status meta field to plugin and theme update event IDs (`5004`, `5031`) so users can see whether the plugin or theme was active at the time of the update.
+	 * Improved Slack integration test button behavior: the button now correctly reflects failure when the Slack API responds with `{"ok": false}`, and a proper error message is shown instead of a false success indicator.
+	 * Renamed the "Send test slack" button to "Send test Slack message". Added a warning callout when encrypted API key constants are in use, and refined other button labels and validation messages in the Slack settings UI.
+	 * `wsal_generate_reports_cron` and all other WSAL custom cron events are now properly cleared on plugin deactivation, preventing WordPress from logging `Cron reschedule event error: invalid_schedule` errors after deactivation.
+	 * Weekly automated reports now correctly respect the "Week Starts On" setting configured under Settings > General, ensuring reports are scheduled from the correct start day of the week.
+	 * Reduced noise from event ID `2055` triggered during collaborative post editing (introduced in WordPress Core 7.0 beta). Events are now better filtered to avoid generating hundreds of redundant log entries during a single collaborative editing session.
+	 * Security hardening across the plugin: fixed multiple WordPress coding standards violations, added missing direct file access protection guards, addressed unescaped output (XSS exposure), added CSRF protection to notice dismissal AJAX calls, and resolved other issues identified via a WordPress Core PCP audit.
+	 * License declarations in `classes/Helpers/` PHP file headers have been reviewed and corrected to ensure consistency with the plugin's GPL v3 license.
 
  * **Bug fixes**
-	 * Fixed: Email summary reports displaying incorrect usernames for users with numeric-only login names, caused by array_slice() mishandling numeric string keys.
-	 * Fixed: Fixed a date discrepancy issue in the summary emails where the previous day's date is shown instead of the correct one.
-	 * Fixed: Connections in multisite installs not appearing after being saved, caused by the get_options_by_prefix function still reading from the old options location after connections were migrated to wp_sitemeta in 5.6.0.
-	 * Fixed: Edge case where a fresh plugin install could cause a fatal error and crash the site during the migration routine, triggered by a null value being passed to count() in the legacy notifications migration class.
-	 * Fixed: Fatal error crashing MainWP dashboard when accessing the plugin, caused by a call to switch_to_blog() in the settings helper, which is a multisite-only function being called in a non-multisite context introduced in 5.6.0.
-	 * Fixed: JavaScript error thrown by the Copy Event Data extension when the activity log contains no events, caused by the script attempting to process an undefined event message on page load.
-	 * Fixed: PHP notices thrown in WordPress 6.9.1 caused by the wsal-event-notes and wsal-copy-event-data scripts declaring darktooltip as a dependency before it was registered.
-	 * Fixed: an edge case fatal error on sites without LearnDash installed, caused by class-notices.php referencing the LearnDash_Helper class unconditionally without first checking whether the LearnDash plugin was active.
-	 * Fixed: HTML entity appearing literally in the Date column of CSV exports instead of rendering as a space before the AM/PM indicator.
+	 * Fixed: Fatal error `Call to a member function get_name() on bool` in `WooCommerce_Sensor_Helper_Second::event_order_items_removed()` when order items have no associated WooCommerce product.
+	 * Fixed: Fatal error triggered when restoring a WooCommerce order via the admin.
+	 * Fixed: Rank Math sensor `store_old_values()` and `store_old_values_delete()` were registered using `add_action()` instead of `add_filter()` on `update_post_metadata` and `delete_post_metadata`. Both callbacks also declared `void` return types and did not return `$check`, silently resetting the filter chain and causing short-circuits from third-party plugins (e.g. Events Calendar Pro) to be ignored.
+	 * Fixed: PHP Warning `Undefined array key "alert_id"` in `class-mainwp-helper.php` on line 535 when using the MainWP integration.
+	 * Fixed: Several small UI/UX issues with the settings export/import feature.
+	 * Fixed: Removed some orphaned code leftovers from obsolete event ID 2106.
+	 * Fixed: Added additional JS-side tag validations in the mirroring setup wizard, to prevent edge-case issues involving certain special characters.
 
 Refer to the complete [plugin changelog](https://melapress.com/support/kb/wp-activity-log-plugin-changelog/?utm_source=wp+repo&utm_medium=repo+link&utm_campaign=wordpress_org&utm_content=wsal) for more detailed information about what was new, improved and fixed in previous version updates of WP Activity Log.
