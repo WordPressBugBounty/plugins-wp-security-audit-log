@@ -6,7 +6,7 @@ License URI: https://www.gnu.org/licenses/gpl.html
 Tags: activity log, event log, user tracking, logger, history 
 Requires at least: 5.5
 Tested up to: 6.9.4
-Stable tag: 5.6.3
+Stable tag: 5.6.3.1
 Requires PHP: 7.4
 
 The #1 user-rated activity log plugin for event logging, activity monitoring and change tracking.
@@ -239,18 +239,16 @@ These capabilities make WP Activity Log a **comprehensive solution for site secu
 
 == Changelog ==
 
-= 5.6.3 (2026-04-28) =
+= 5.6.3.1 (2026-05-11) =
 
- * **Plugin improvements & Enhancements**
-	 * Improved deactivation feedback data collection with additional logic checks.
-	 * Improved translation support for JavaScript strings, ensuring all plugin text in JS files is available for translation.
-	 * Updated the jquery-validation library to the latest version 1.22.1.
-	 * Updated developer dependencies and resolved flagged security advisories to keep the codebase aligned with current security standards.
-	 * Updated links and help text in the plugin's Help & Contact Us page.
+ * **Plugin improvement & Enhancement**
+	 * Added support for additional AWS CloudWatch regions in the mirroring configuration.
 
- * **Bug fixes**
-	 * Fixed event ID 4002 which was not capturing secondary role changes correctly.
-	 * Fixed additional minor warnings appearing in certain server environments.
-	 * Fixed IP address lookup links in the activity log viewer now correctly pointing to the lookup provider's website.
+ * **Security fix**
+	 * Fixed an XSS vulnerability responsibly reported by Daroo.
+
+
+ * **Bug fix**
+	 * Fixed an issue with the CSS styles being used inside the red notification badge displayed next to the plugin title in the side-menu.
 
 Refer to the complete [plugin changelog](https://melapress.com/support/kb/wp-activity-log-plugin-changelog/?utm_source=wp+repo&utm_medium=repo+link&utm_campaign=wordpress_org&utm_content=wsal) for more detailed information about what was new, improved and fixed in previous version updates of WP Activity Log.
