@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit648b453288a4f2b252c70df5f48c4232
+class ComposerStaticInitfd3cc1b27dea64ef382c40434b0bdd56
 {
     public static $prefixLengthsPsr4 = array (
         'W' =>
@@ -100,7 +100,9 @@ class ComposerStaticInit648b453288a4f2b252c70df5f48c4232
         'WSAL\\Views\\Setup_Wizard' => __DIR__ . '/../..' . '/classes/Views/class-setup-wizard.php',
         'WSAL\\WP_Sensors\\ACF_Meta_Sensor' => __DIR__ . '/../..' . '/classes/WPSensors/class-acf-meta-sensor.php',
         'WSAL\\WP_Sensors\\ACF_Sensor' => __DIR__ . '/../..' . '/classes/WPSensors/class-acf-sensor.php',
+        'WSAL\\WP_Sensors\\AI_WP_Plugin_Sensor' => __DIR__ . '/../..' . '/classes/WPSensors/class-ai-wp-plugin-sensor.php',
         'WSAL\\WP_Sensors\\Alerts\\ACF_Custom_Alerts' => __DIR__ . '/../..' . '/classes/WPSensors/Alerts/class-acf-custom-alerts.php',
+        'WSAL\\WP_Sensors\\Alerts\\AI_WP_Plugin_Alerts' => __DIR__ . '/../..' . '/classes/WPSensors/Alerts/class-ai-wp-plugin-alerts.php',
         'WSAL\\WP_Sensors\\Alerts\\BBPress_Custom_Alerts' => __DIR__ . '/../..' . '/classes/WPSensors/Alerts/class-bbpress-custom-alerts.php',
         'WSAL\\WP_Sensors\\Alerts\\Gravity_Forms_Custom_Alerts' => __DIR__ . '/../..' . '/classes/WPSensors/Alerts/class-gravity-forms-custom-alerts.php',
         'WSAL\\WP_Sensors\\Alerts\\LearnDash_Custom_Alerts' => __DIR__ . '/../..' . '/classes/WPSensors/Alerts/class-learndash-custom-alerts.php',
@@ -121,6 +123,7 @@ class ComposerStaticInit648b453288a4f2b252c70df5f48c4232
         'WSAL\\WP_Sensors\\BBPress_User_Sensor' => __DIR__ . '/../..' . '/classes/WPSensors/class-bbpress-user-sensor.php',
         'WSAL\\WP_Sensors\\Gravity_Forms_Sensor' => __DIR__ . '/../..' . '/classes/WPSensors/class-gravity-forms-sensor.php',
         'WSAL\\WP_Sensors\\Helpers\\ACF_Helper' => __DIR__ . '/../..' . '/classes/WPSensors/Helpers/class-acf-helper.php',
+        'WSAL\\WP_Sensors\\Helpers\\AI_WP_Plugin_Helper' => __DIR__ . '/../..' . '/classes/WPSensors/Helpers/class-ai-wp-plugin-helper.php',
         'WSAL\\WP_Sensors\\Helpers\\BBPress_Helper' => __DIR__ . '/../..' . '/classes/WPSensors/Helpers/class-bbpress-helper.php',
         'WSAL\\WP_Sensors\\Helpers\\GravityForms_Helper' => __DIR__ . '/../..' . '/classes/WPSensors/Helpers/class-gravityforms-helper.php',
         'WSAL\\WP_Sensors\\Helpers\\LearnDash_Helper' => __DIR__ . '/../..' . '/classes/WPSensors/Helpers/class-learndash-helper.php',
@@ -133,6 +136,7 @@ class ComposerStaticInit648b453288a4f2b252c70df5f48c4232
         'WSAL\\WP_Sensors\\Helpers\\Termly_Helper' => __DIR__ . '/../..' . '/classes/WPSensors/Helpers/class-termly-helper.php',
         'WSAL\\WP_Sensors\\Helpers\\WPForms_Helper' => __DIR__ . '/../..' . '/classes/WPSensors/Helpers/class-wpforms-helper.php',
         'WSAL\\WP_Sensors\\Helpers\\WP_2FA_Helper' => __DIR__ . '/../..' . '/classes/WPSensors/Helpers/class-wp-2fa-helper.php',
+        'WSAL\\WP_Sensors\\Helpers\\WP_AI_Connectors_Helper' => __DIR__ . '/../..' . '/classes/WPSensors/Helpers/class-wp-ai-connectors-helper.php',
         'WSAL\\WP_Sensors\\Helpers\\WP_Plugins_Themes_Helper' => __DIR__ . '/../..' . '/classes/WPSensors/Helpers/class-wp-plugins-themes-helper.php',
         'WSAL\\WP_Sensors\\Helpers\\Woocommerce_Helper' => __DIR__ . '/../..' . '/classes/WPSensors/Helpers/class-woocommerce-helper.php',
         'WSAL\\WP_Sensors\\Helpers\\Yoast_SEO_Helper' => __DIR__ . '/../..' . '/classes/WPSensors/Helpers/class-yoast-seo-helper.php',
@@ -182,9 +186,9 @@ class ComposerStaticInit648b453288a4f2b252c70df5f48c4232
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit648b453288a4f2b252c70df5f48c4232::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit648b453288a4f2b252c70df5f48c4232::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit648b453288a4f2b252c70df5f48c4232::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitfd3cc1b27dea64ef382c40434b0bdd56::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitfd3cc1b27dea64ef382c40434b0bdd56::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitfd3cc1b27dea64ef382c40434b0bdd56::$classMap;
 
         }, null, ClassLoader::class);
     }

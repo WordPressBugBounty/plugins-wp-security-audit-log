@@ -5,8 +5,8 @@ License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
 Tags: activity log, event log, user tracking, logger, history 
 Requires at least: 5.5
-Tested up to: 6.9.4
-Stable tag: 5.6.3.1
+Tested up to: 7.0
+Stable tag: 5.6.4
 Requires PHP: 7.4
 
 The #1 user-rated activity log plugin for event logging, activity monitoring and change tracking.
@@ -239,16 +239,34 @@ These capabilities make WP Activity Log a **comprehensive solution for site secu
 
 == Changelog ==
 
-= 5.6.3.1 (2026-05-11) =
+= 5.6.4 (2026-06-02) =
 
- * **Plugin improvement & Enhancement**
-	 * Added support for additional AWS CloudWatch regions in the mirroring configuration.
+ * **New Wordpress AI Connector activity log event IDs **
+	 * Added four new event IDs (6081 to 6084) to track the WordPress 7.0 AI connectors, which are:
+	 * ID 6081 - AI connector connected
+	 * ID 6082 - AI connector disconnected
+	 * 6083 - AI master switch enabled/disabled
+	 * 6084 - AI plugin feature enabled/disabled
 
- * **Security fix**
-	 * Fixed an XSS vulnerability responsibly reported by Daroo.
+ * **Security fixes**
+	 * Fixed a stored XSS vulnerability in the MainWP integration reported by Daroo.
+	 * Fixed a PHP object injection issue related to the handling of failed login event data reported by Daroo.
 
 
- * **Bug fix**
-	 * Fixed an issue with the CSS styles being used inside the red notification badge displayed next to the plugin title in the side-menu.
+ * **Improvements**
+	 * Updated plugin copy, and reorganized the menu for a cleaner, more consistent layout.
+	 * Updated the setup wizard to include information about related plugin features.
+	 * Added information in the search placeholder about additional capabilities.
+	 * Added inline references on selected events to highlight additional activity that can be tracked.
+	 * Removed the "red dot badge" in the plugin menu that previously displayed the banner count.
+	 * Updated the following third party libraries; Moment.js and bootstrap-select.
+	 * Applied additional security hardening and input sanitization across the plugin.
+
+ * **Bug fixes**
+	 * Fixed a fatal TypeError in the WPForms sensor (`event_form_saved`) triggered when the Divi page builder fired a heartbeat autosave on a WPForms form, caused by `preg_match()` running before its subject was validated as a non-null string.
+	 * Fixed wizard radio buttons not rendering correctly under WordPress 7.0.
+	 * Fixed an alignment issue on the User Sessions page under WordPress 7.0.
+	 * Fixed an alignment issue with the "Add note" button on the Log Viewer page under WordPress 7.0.
+	 * Removed an obsolete notification shown when the license was disconnected from the plugin.
 
 Refer to the complete [plugin changelog](https://melapress.com/support/kb/wp-activity-log-plugin-changelog/?utm_source=wp+repo&utm_medium=repo+link&utm_campaign=wordpress_org&utm_content=wsal) for more detailed information about what was new, improved and fixed in previous version updates of WP Activity Log.
