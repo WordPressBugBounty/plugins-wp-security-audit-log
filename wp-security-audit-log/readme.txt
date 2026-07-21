@@ -5,8 +5,8 @@ License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl.html
 Tags: activity log, event log, user tracking, logger, history 
 Requires at least: 5.5
-Tested up to: 7.0
-Stable tag: 5.6.4
+Tested up to: 7.0.2
+Stable tag: 5.6.5
 Requires PHP: 7.4
 
 The #1 user-rated activity log plugin for event logging, activity monitoring and change tracking.
@@ -239,34 +239,43 @@ These capabilities make WP Activity Log a **comprehensive solution for site secu
 
 == Changelog ==
 
-= 5.6.4 (2026-06-02) =
+= 5.6.5 (2026-07-21) =
 
- * **New Wordpress AI Connector activity log event IDs **
-	 * Added four new event IDs (6081 to 6084) to track the WordPress 7.0 AI connectors, which are:
-	 * ID 6081 - AI connector connected
-	 * ID 6082 - AI connector disconnected
-	 * 6083 - AI master switch enabled/disabled
-	 * 6084 - AI plugin feature enabled/disabled
+ * **New activity log event IDs** 
 
- * **Security fixes**
-	 * Fixed a stored XSS vulnerability in the MainWP integration reported by Daroo.
-	 * Fixed a PHP object injection issue related to the handling of failed login event data reported by Daroo.
+	 *  Event ID 6073 – Requested to change the Administrator email address. The event records the current and requested addresses across single sites, multisite networks, and individual subsites.
 
+ * **New features & functionality** 
 
- * **Improvements**
-	 * Updated plugin copy, and reorganized the menu for a cleaner, more consistent layout.
-	 * Updated the setup wizard to include information about related plugin features.
-	 * Added information in the search placeholder about additional capabilities.
-	 * Added inline references on selected events to highlight additional activity that can be tracked.
-	 * Removed the "red dot badge" in the plugin menu that previously displayed the banner count.
-	 * Updated the following third party libraries; Moment.js and bootstrap-select.
-	 * Applied additional security hardening and input sanitization across the plugin.
+	 *  Added multisite filtering options for mirrored activity logs, allowing selected subsites to be excluded from data sent to external integrations.
+	 *  Added a dismissible post-update banner highlighting Premium monitoring and alerting features.
+	 *  Added an “Add note” prompt to the Free activity log inspector for selected high-value events. The prompt opens a modal explaining the activity log notes available in Premium.
+
+ * **Security fix** 
+
+	 *  Fixed a CSRF vulnerability reported by Levon Balyan.
+
+ * **Functionality & plugin improvements**
+
+	 *  Hardened Activity Log AJAX handlers with stricter nonce verification, capability checks, and input validation.
+	 *  Hardened request handling in Premium user session management and removed obsolete code.
+	 *  Enforced nonce verification before legacy settings save and import callbacks can run.
+	 *  Updated AI connector events `6081` and `6082` to High severity.
+	 *  Replaced the large post-update changelog banner with a smaller, dismissible notification linking to the changelog.
+	 *  Added standard UTM tracking parameters to the Melapress link in the plugin header and menu.
+	 *  Updated the bundled jQuery UI CSS for improved compatibility with the version included in WordPress.
 
  * **Bug fixes**
-	 * Fixed a fatal TypeError in the WPForms sensor (`event_form_saved`) triggered when the Divi page builder fired a heartbeat autosave on a WPForms form, caused by `preg_match()` running before its subject was validated as a non-null string.
-	 * Fixed wizard radio buttons not rendering correctly under WordPress 7.0.
-	 * Fixed an alignment issue on the User Sessions page under WordPress 7.0.
-	 * Fixed an alignment issue with the "Add note" button on the Log Viewer page under WordPress 7.0.
-	 * Removed an obsolete notification shown when the license was disconnected from the plugin.
+
+	 *  Fixed Activity Log icon alignment issues introduced by WordPress 7.0.1 styling changes.
+	 *  Fixed broken WP Activity Log styling in the MainWP dashboard after updating to WordPress 7.0.
+	 *  Fixed clearing Activity Log search results from MainWP redirecting users outside the site.
+	 *  Fixed the Redirection sensor returning `null` from the `rest_dispatch_request` filter when REST route callbacks use closures. This could discard responses supplied by WordPress or other plugins, including optimized WooCommerce REST responses. Thanks to Paul from WooCommerce POS for reporting this issue.
+	 *  Fixed invalid MySQL connection settings being saved under *Integrations → Connections*. New connections that fail validation are no longer saved, while failed edits preserve the previous settings and display the MySQL error. Connection attempts to unreachable hosts are now limited by PHP’s `default_socket_timeout`.
+	 *  Fixed the Archiving tab’s **Test Connection** button incorrectly reporting success when the database connection failed.
+	 *  Fixed mirroring exclusion selectors remaining open when multiple selectors were expanded.
+	 *  Fixed the custom Slack recipient for built-in notification event `2046` not being saved or used.
+	 *  Fixed Activity Log search returning no results in the Free edition in some environments.
+	 *  Fixed Administrator email change events on multisite subsites. Requested changes are recorded with event `6073`, while confirmed changes continue to use event `6003` and are associated with the correct subsite.
 
 Refer to the complete [plugin changelog](https://melapress.com/support/kb/wp-activity-log-plugin-changelog/?utm_source=wp+repo&utm_medium=repo+link&utm_campaign=wordpress_org&utm_content=wsal) for more detailed information about what was new, improved and fixed in previous version updates of WP Activity Log.
