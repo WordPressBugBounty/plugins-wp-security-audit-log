@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit54dd86f58f3e7790d30c10bb1700073a
+class ComposerStaticInitf76d33d6dfe7c9f5f5304bc207827839
 {
     public static $prefixLengthsPsr4 = array (
         'W' =>
@@ -82,6 +82,8 @@ class ComposerStaticInit54dd86f58f3e7790d30c10bb1700073a
         'WSAL\\Helpers\\View_Manager' => __DIR__ . '/../..' . '/classes/Helpers/class-view-manager.php',
         'WSAL\\Helpers\\WP_Helper' => __DIR__ . '/../..' . '/classes/Helpers/class-wp-helper.php',
         'WSAL\\Helpers\\Widget_Manager' => __DIR__ . '/../..' . '/classes/Helpers/class-widget-manager.php',
+        'WSAL\\Licensing\\Licensing_Factory' => __DIR__ . '/../..' . '/classes/Licensing/class-licensing-factory.php',
+        'WSAL\\Licensing\\Licensing_Helper' => __DIR__ . '/../..' . '/classes/Licensing/class-licensing-helper.php',
         'WSAL\\ListAdminEvents\\List_Events' => __DIR__ . '/../..' . '/classes/ListAdminEvents/class-list-events.php',
         'WSAL\\Loggers\\Database_Logger' => __DIR__ . '/../..' . '/classes/Loggers/class-database-logger.php',
         'WSAL\\Loggers\\Notification_Logger' => __DIR__ . '/../..' . '/classes/notification/class-notification-logger.php',
@@ -186,9 +188,9 @@ class ComposerStaticInit54dd86f58f3e7790d30c10bb1700073a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit54dd86f58f3e7790d30c10bb1700073a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit54dd86f58f3e7790d30c10bb1700073a::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit54dd86f58f3e7790d30c10bb1700073a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf76d33d6dfe7c9f5f5304bc207827839::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf76d33d6dfe7c9f5f5304bc207827839::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf76d33d6dfe7c9f5f5304bc207827839::$classMap;
 
         }, null, ClassLoader::class);
     }
